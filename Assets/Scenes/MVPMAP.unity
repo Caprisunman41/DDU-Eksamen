@@ -275,7 +275,7 @@ Transform:
   m_GameObject: {fileID: 91385625}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -3.66, z: 0}
+  m_LocalPosition: {x: 0, y: -3.43, z: 0}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -323,6 +323,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CharacterController
   MoveStats: {fileID: 11400000, guid: f8a268ea952984fa9941ce67b782d16c, type: 2}
   _bodyColl: {fileID: 54554925}
+  _isJumping: 0
+  _isFastFalling: 0
+  _isFalling: 0
+  _apexPoint: 0
+  _timePastApexThreshold: 0
+  _isPastApexThreshold: 0
 --- !u!1 &330330065
 GameObject:
   m_ObjectHideFlags: 0

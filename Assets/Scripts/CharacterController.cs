@@ -47,6 +47,7 @@ public class CharacterController : MonoBehaviour
     {
         _isFacingRight = true;
         _rb = GetComponent<Rigidbody2D>();
+        _rb.gravityScale = 0f; // FIX 1: Disable Unity's built-in gravity
     }
 
     private void Update()
@@ -168,7 +169,7 @@ public class CharacterController : MonoBehaviour
             _isPastApexThreshold = false;
             _numberOfJumpsUsed = 0;
 
-            VerticalVelocity = Physics2D.gravity.y;
+            VerticalVelocity = -2f; // FIX 3: Use small grounding value instead of Physics2D.gravity.y
         }
     }
 
@@ -182,6 +183,13 @@ public class CharacterController : MonoBehaviour
 
     private void Jump()
     {
+        // FIX 2: Apply gravity when falling naturally (not jumping or fast falling)
+        if (!_isJumping && !_isFastFalling && !_isGrounded)
+        {
+            _isFalling = true;
+            VerticalVelocity += MoveStats.Gravity * Time.fixedDeltaTime;
+        }
+
         if (_isJumping)
         {
             if (_bumpHead) _isFastFalling = true;
@@ -261,7 +269,6 @@ public class CharacterController : MonoBehaviour
         DebugGround(capsuleCastOrigin, capsuleCastSize);
         Debug.Log("Origin: " + capsuleCastOrigin + "  Size: " + capsuleCastSize);
         Debug.Log("Ground hit: " + (_groundHit.collider != null ? _groundHit.collider.name : "none"));
-
     }
 
     private void DebugGround(Vector2 origin, Vector2 size)

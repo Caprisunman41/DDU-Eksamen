@@ -270,6 +270,24 @@ public class CharacterController : MonoBehaviour
         Debug.Log("Origin: " + capsuleCastOrigin + "  Size: " + capsuleCastSize);
         Debug.Log("Ground hit: " + (_groundHit.collider != null ? _groundHit.collider.name : "none"));
     }
+	private void BumpedHead()
+	{
+    	Vector2 castOrigin = new Vector2(_bodyColl.bounds.center.x, _bodyColl.bounds.max.y);
+    	Vector2 castSize = new Vector2(_bodyColl.bounds.size.x * MoveStats.HeadWidth, MoveStats.HeadDetectionRayLength);
+
+    	_headHit = Physics2D.CapsuleCast(
+        	castOrigin,
+        	castSize,
+        	CapsuleDirection2D.Horizontal,
+        	0f,
+        	Vector2.up,
+        	MoveStats.HeadDetectionRayLength,
+        	MoveStats.GroundLayer
+    	);
+
+    	_bumpHead = _headHit.collider != null;
+	}
+
 
     private void DebugGround(Vector2 origin, Vector2 size)
     {
@@ -290,6 +308,8 @@ public class CharacterController : MonoBehaviour
     private void CollisionChecks()
     {
         IsGrounded();
+		BumpedHead();
+		
     }
 
     #endregion

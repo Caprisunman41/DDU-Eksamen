@@ -12,27 +12,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9bb091f9694f4016adf7e4bba8ff9bf, type: 3}
   m_Name: ControllerStats
   m_EditorClassIdentifier: Assembly-CSharp::ControllerStats
-  MaxWalkSpeed: 12.5
+  MaxWalkSpeed: 9
   GroundAcceleration: 5
   GroundDeceleration: 20
-  AirAcceleration: 5
+  AirAcceleration: 6.5
   AirDeceleration: 9.82
-  MaxRunSpeed: 20
+  MaxRunSpeed: 14.5
   GroundLayer:
     serializedVersion: 2
     m_Bits: 8
-  GroundDetectionRayLength: 0.02
-  HeadDetectionRayLength: 0.02
+  GroundDetectionRayLength: 0.05
+  HeadDetectionRayLength: 0.05
   HeadWidth: 0.75
-  JumpHeight: 4.5
+  JumpHeight: 3
   JumpHeightCompensationFactor: 1.05
-  TimeTillJumpApex: 0.35
+  TimeTillJumpApex: 0.5
   GravityOnReleaseWithMultiplier: 2
   MaxFallSpeed: 26
   NumberOfJumpsAllowed: 2
   TimeForUpwardsCancel: 0.027
   ApexThreshold: 0.97
-  ApexHangTime: 0.07
+  ApexHangTime: 0.04
   JumpBufferTime: 0.125
   JumpCoyoteTime: 0.1
   DebugShowIsGroundedBox: 1

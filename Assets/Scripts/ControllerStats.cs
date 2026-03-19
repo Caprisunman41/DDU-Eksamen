@@ -40,6 +40,11 @@ public class ControllerStats : ScriptableObject
     [Header("Jump Coyote Time")]
     [Range(0f, 1f)] public float JumpCoyoteTime = 0.1f;
 
+	[Header("Dash")]
+	[Range(0f, 60f)] public float DashSpeed = 20f;
+	[Range(0f, 1f)] public float DashDuration = 0.15f;
+	[Range(0f, 1f)] public float DashCooldown = 0.3f;
+
     [Header("Debug")]
     public bool DebugShowIsGroundedBox;
     public bool DebugShowHeadBumpBox;

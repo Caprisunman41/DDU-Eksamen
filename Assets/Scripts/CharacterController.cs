@@ -43,6 +43,14 @@ public class CharacterController : MonoBehaviour
     // coyote time
     private float _coyoteTimer;
 
+	//dash variables
+	private bool _isDashing;
+	private bool _canDash = true;
+	private float _dashTimer;
+	private Vector2 _dashDirection;
+    private float _dashCooldownTimer;
+
+
     private void Awake()
     {
         _isFacingRight = true;
@@ -54,12 +62,14 @@ public class CharacterController : MonoBehaviour
     {
         CountTimers();
         JumpChecks();
+		DashChecks();
     }
 
     private void FixedUpdate()
     {
         CollisionChecks();
         Jump();
+		Dash();
 
         if (_isGrounded)
         {
@@ -183,6 +193,7 @@ public class CharacterController : MonoBehaviour
 
     private void Jump()
     {
+		if (_isDashing) return; 
         // FIX 2: Apply gravity when falling naturally (not jumping or fast falling)
         if (!_isJumping && !_isFastFalling && !_isGrounded)
         {
@@ -246,6 +257,62 @@ public class CharacterController : MonoBehaviour
     }
 
     #endregion
+
+	#region Dash
+
+    private void DashChecks()
+    {
+        if (_dashCooldownTimer > 0f)
+            _dashCooldownTimer -= Time.deltaTime;
+
+        if (InputManager.DashWasPressed && _canDash && _dashCooldownTimer <= 0f)
+        {
+            _isDashing = true;
+            _canDash = false;
+            _dashTimer = MoveStats.DashDuration;
+            _dashCooldownTimer = MoveStats.DashCooldown;
+            
+            Vector2 input = InputManager.Movement;
+
+            if (input == Vector2.zero)
+                input = new Vector2(_isFacingRight ? 1f : -1f, 0f);
+            else
+            {
+                input.x = Mathf.Abs(input.x) > 0.3f ? Mathf.Sign(input.x) : 0f;
+                input.y = Mathf.Abs(input.y) > 0.3f ? Mathf.Sign(input.y) : 0f;
+                if (input == Vector2.zero)
+                    input = new Vector2(_isFacingRight ? 1f : -1f, 0f);
+            }
+
+            _dashDirection = input.normalized;
+            
+            Debug.Log("Dash direction: " + _dashDirection + " | Input: " + InputManager.Movement);
+            
+            
+            VerticalVelocity = 0f;
+        }
+    }
+
+    private void Dash()
+    {
+        if (_isDashing)
+        {
+            _dashTimer -= Time.fixedDeltaTime;
+            _rb.linearVelocity = _dashDirection * MoveStats.DashSpeed;
+
+            if (_dashTimer <= 0f)
+            {
+                _isDashing = false;
+                _rb.linearVelocity = _dashDirection * (MoveStats.DashSpeed * 0.3f);
+            }
+            return;
+        }
+
+        if (_isGrounded)
+            _canDash = true;
+    }
+
+	#endregion
 
     #region Collision Checks
 

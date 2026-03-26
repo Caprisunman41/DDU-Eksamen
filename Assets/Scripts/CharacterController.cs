@@ -195,10 +195,6 @@ public class CharacterController : MonoBehaviour
 
     private void Jump()
     {
-		if (_isDashing) return; 
-		{
-		Debug.Log("Jump skipped - isDashing" + _isDashing);
-		}
         // FIX 2: Apply gravity when falling naturally (not jumping or fast falling)
         if (!_isJumping && !_isFastFalling && !_isGrounded)
         {
@@ -258,7 +254,8 @@ public class CharacterController : MonoBehaviour
         }
 
         VerticalVelocity = Mathf.Clamp(VerticalVelocity, -MoveStats.MaxFallSpeed, 50f);
-        _rb.linearVelocity = new Vector2(_rb.linearVelocity.x, VerticalVelocity);
+		if (!_isDashing)
+        	_rb.linearVelocity = new Vector2(_rb.linearVelocity.x, VerticalVelocity);
     }
 
     #endregion
@@ -289,8 +286,6 @@ public class CharacterController : MonoBehaviour
     			float x = Mathf.Abs(input.x) > 0.3f ? Mathf.Sign(input.x) : 0f;
     			float y = Mathf.Abs(input.y) > 0.3f ? Mathf.Sign(input.y) : 0f;
 
-    			if (x == 0f && y != 0f)
-        			x = _isFacingRight ? 1f : -1f;
 
     			_dashDirection = new Vector2(x, y).normalized;
 			}

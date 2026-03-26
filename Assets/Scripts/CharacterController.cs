@@ -305,7 +305,7 @@ public class CharacterController : MonoBehaviour
             if (_dashTimer <= 0f)
             {
                 _isDashing = false;
-                _rb.linearVelocity = _dashDirection * (MoveStats.DashSpeed * 0.3f);
+                _rb.linearVelocity = new Vector2(_dashDirection.x * (MoveStats.DashSpeed * 0.3f), 0f);
             }
             return;
         }

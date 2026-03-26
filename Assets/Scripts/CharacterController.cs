@@ -68,8 +68,8 @@ public class CharacterController : MonoBehaviour
     private void FixedUpdate()
     {
         CollisionChecks();
-        Jump();
-		Dash();
+        Dash();
+		Jump();
 
         if (_isGrounded)
         {
@@ -85,6 +85,8 @@ public class CharacterController : MonoBehaviour
 
     private void Move(float acceleration, float deceleration, Vector2 moveInput)
     {
+		if (_isDashing) return;
+		
         if (moveInput != Vector2.zero)
         {
             TurnCheck(moveInput);
@@ -194,6 +196,9 @@ public class CharacterController : MonoBehaviour
     private void Jump()
     {
 		if (_isDashing) return; 
+		{
+		Debug.Log("Jump skipped - isDashing" + _isDashing);
+		}
         // FIX 2: Apply gravity when falling naturally (not jumping or fast falling)
         if (!_isJumping && !_isFastFalling && !_isGrounded)
         {
@@ -272,31 +277,33 @@ public class CharacterController : MonoBehaviour
             _dashTimer = MoveStats.DashDuration;
             _dashCooldownTimer = MoveStats.DashCooldown;
             
-            Vector2 input = InputManager.Movement;
+			Vector2 input = InputManager.Movement;
+			Debug.Log("Raw input: " + input);
 
-            if (input == Vector2.zero)
-                input = new Vector2(_isFacingRight ? 1f : -1f, 0f);
-            else
-            {
-                input.x = Mathf.Abs(input.x) > 0.3f ? Mathf.Sign(input.x) : 0f;
-                input.y = Mathf.Abs(input.y) > 0.3f ? Mathf.Sign(input.y) : 0f;
-                if (input == Vector2.zero)
-                    input = new Vector2(_isFacingRight ? 1f : -1f, 0f);
-            }
+			if (input == Vector2.zero)
+			{
+    			_dashDirection = new Vector2(_isFacingRight ? 1f : -1f, 0f);
+			}
+			else
+			{
+    			float x = Mathf.Abs(input.x) > 0.3f ? Mathf.Sign(input.x) : 0f;
+    			float y = Mathf.Abs(input.y) > 0.3f ? Mathf.Sign(input.y) : 0f;
 
-            _dashDirection = input.normalized;
-            
-            Debug.Log("Dash direction: " + _dashDirection + " | Input: " + InputManager.Movement);
-            
-            
-            VerticalVelocity = 0f;
-        }
+    			if (x == 0f && y != 0f)
+        			x = _isFacingRight ? 1f : -1f;
+
+    			_dashDirection = new Vector2(x, y).normalized;
+			}
+
+				VerticalVelocity = 0f;
+		}
     }
 
     private void Dash()
     {
         if (_isDashing)
         {
+			Debug.Log("Dashing with direction" + _dashDirection);
             _dashTimer -= Time.fixedDeltaTime;
             _rb.linearVelocity = _dashDirection * MoveStats.DashSpeed;
 

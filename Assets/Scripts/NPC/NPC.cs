@@ -11,6 +11,7 @@ public class NPC : MonoBehaviour, IInteractable
 
     private int dialogueIndex;
     private bool isTyping, isDialogueActive;
+    private bool isChoosingOption;
 
     private void Start()
     {
@@ -24,21 +25,21 @@ public class NPC : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        // Find pausemenu så man kan referere til isPaused
         PauseMenu pauseMenu = Object.FindAnyObjectByType<PauseMenu>();
-        // if no dialogue data or the game is paused and no dialogue is active
         if (dialogueData == null || (pauseMenu.isPaused && !isDialogueActive))
-        return;
+            return;
 
-        if(isDialogueActive)
-        {
-            NextLine();
-        }
-        else
-        {
+        if (!isDialogueActive)
             StartDialogue();
-        }
+    }
 
+    public void AdvanceDialogue()
+    {
+        PauseMenu pauseMenu = Object.FindAnyObjectByType<PauseMenu>();
+        if (dialogueData == null || pauseMenu.isPaused || !isDialogueActive || isChoosingOption)
+            return;
+
+        NextLine();
     }
 
     void StartDialogue()
@@ -117,6 +118,7 @@ public class NPC : MonoBehaviour, IInteractable
 
     void DisplayChoices(DialogueChoice choice)
     {
+        isChoosingOption = true;
         for (int i = 0; i < choice.choices.Length; i++)
         {
             int nextIndex = choice.nextDialogueIndexes[i];
@@ -124,9 +126,10 @@ public class NPC : MonoBehaviour, IInteractable
         }
     }
 
-    void ChooseOption(int NextIndex)
+    void ChooseOption(int nextIndex)
     {
-        dialogueIndex = NextIndex;
+        isChoosingOption = false;
+        dialogueIndex = nextIndex;
         dialogueUI.ClearChoices();
         DisplayCurrentLine();
     }

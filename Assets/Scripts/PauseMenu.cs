@@ -6,9 +6,15 @@ public class PauseMenu : MonoBehaviour
 {
     public GameObject Container;
     public bool isPaused = false;
+    public PlayerHealth playerHealth;
 
     void Update()
     {
+        if (playerHealth.isDead)
+        {
+            return;
+        }
+        
         if (Keyboard.current.escapeKey.wasPressedThisFrame)
         {
             if (isPaused)

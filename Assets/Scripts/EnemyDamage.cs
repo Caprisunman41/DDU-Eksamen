@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class EnemyDamage : MonoBehaviour
 {
+    public EnemyMovement EnemyMovement;
+    public CharacterController characterController;
     public PlayerHealth playerHealth;
     public float normalEnemy = 0.5f;
     
@@ -9,6 +11,15 @@ public class EnemyDamage : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
+            characterController.kbCounter = characterController.kbTotalTime;
+            if (collision.transform.position.x <= transform.position.x)
+            {
+                characterController.knockFromRight = true;
+            }
+            if (collision.transform.position.x > transform.position.x)
+            {
+                characterController.knockFromRight = false;
+            }
             playerHealth.TakeDamage(normalEnemy);
         }
     }

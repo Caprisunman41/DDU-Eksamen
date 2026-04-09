@@ -49,6 +49,13 @@ public class CharacterController : MonoBehaviour
 	private float _dashTimer;
 	private Vector2 _dashDirection;
     private float _dashCooldownTimer;
+    
+    //KB
+    public float kbForce;
+    public float kbCounter;
+    public float kbTotalTime;
+
+    public bool knockFromRight;
 
 
     private void Awake()
@@ -69,15 +76,20 @@ public class CharacterController : MonoBehaviour
     {
         CollisionChecks();
         Dash();
-		Jump();
+        Jump();
 
-        if (_isGrounded)
+        if (kbCounter > 0)
         {
-            Move(MoveStats.GroundAcceleration, MoveStats.GroundDeceleration, InputManager.Movement);
+            kbCounter -= Time.fixedDeltaTime;
+            float kbX = knockFromRight ? -kbForce : kbForce;
+            _rb.linearVelocity = new Vector2(kbX, kbForce);
         }
         else
         {
-            Move(MoveStats.AirAcceleration, MoveStats.AirDeceleration, InputManager.Movement);
+            if (_isGrounded)
+                Move(MoveStats.GroundAcceleration, MoveStats.GroundDeceleration, InputManager.Movement);
+            else
+                Move(MoveStats.AirAcceleration, MoveStats.AirDeceleration, InputManager.Movement);
         }
     }
 
@@ -394,6 +406,15 @@ public class CharacterController : MonoBehaviour
         else
             _coyoteTimer = MoveStats.JumpCoyoteTime;
     }
-
+    
+    #endregion
+    
+    #region Knockback
+    public void TakeKnockback(bool fromRight)
+    {
+        knockFromRight = fromRight;
+        kbCounter = kbTotalTime;
+    }
+    
     #endregion
 }

@@ -15,10 +15,13 @@ public class GameOver : MonoBehaviour
         Time.timeScale = 0f;
     }
 
+    bool gameOver = false;
+
     void Update()
     {
-        if (playerHealth.isDead)
+        if (playerHealth.isDead && !gameOver)
         {
+            gameOver = true;
             YouDied();
         }
     }

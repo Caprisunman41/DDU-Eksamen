@@ -317,19 +317,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 59081301}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &59081301
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2081,8 +2069,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
+      - m_Target: {fileID: 874550839}
+        m_TargetAssemblyTypeName: GameOver, Assembly-CSharp
         m_MethodName: QuitButton
         m_Mode: 1
         m_Arguments:
@@ -2214,8 +2202,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
+      - m_Target: {fileID: 874550839}
+        m_TargetAssemblyTypeName: GameOver, Assembly-CSharp
         m_MethodName: RestartButton
         m_Mode: 1
         m_Arguments:

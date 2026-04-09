@@ -14,7 +14,10 @@ public class InteractionDetector : MonoBehaviour
 
     void OnClick(InputValue value)
     {
-        interactableInRange?.AdvanceDialogue(); // Click - only advances
+        if (value.isPressed)
+        {
+            interactableInRange?.AdvanceDialogue(); // Click - only advances
+        }
     }
 
 

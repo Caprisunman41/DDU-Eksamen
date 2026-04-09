@@ -33,15 +33,26 @@ public class NPC : MonoBehaviour, IInteractable
             StartDialogue();
     }
 
+    private float advanceCooldown;
+
     public void AdvanceDialogue()
     {
         PauseMenu pauseMenu = Object.FindAnyObjectByType<PauseMenu>();
-        if (dialogueData == null || pauseMenu.isPaused || !isDialogueActive || isChoosingOption)
+        if (dialogueData == null || pauseMenu.isPaused || !isDialogueActive || isChoosingOption || Time.time < advanceCooldown)
             return;
 
         NextLine();
     }
 
+    void ChooseOption(int nextIndex)
+    {
+        advanceCooldown = Time.time + 0.5f;
+        dialogueIndex = nextIndex;
+        dialogueUI.ClearChoices();
+        DisplayCurrentLine();
+    }
+
+  
     void StartDialogue()
     {
         isDialogueActive = true;
@@ -126,16 +137,11 @@ public class NPC : MonoBehaviour, IInteractable
         }
     }
 
-    void ChooseOption(int nextIndex)
-    {
-        isChoosingOption = false;
-        dialogueIndex = nextIndex;
-        dialogueUI.ClearChoices();
-        DisplayCurrentLine();
-    }
+    
 
     void DisplayCurrentLine()
     {
+        isChoosingOption = false;
         StopAllCoroutines();
         StartCoroutine(TypeLine());
     }

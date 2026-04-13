@@ -9,14 +9,14 @@ public class InteractionDetector : MonoBehaviour
     // Update is called once per frame
     void OnInteract(InputValue value)
     {
-        interactableInRange?.Interact(); // E - only opens
+        interactableInRange?.Interact(); // E to interact
     }
 
     void OnClick(InputValue value)
     {
         if (value.isPressed)
         {
-            interactableInRange?.AdvanceDialogue(); // Click - only advances
+            interactableInRange?.AdvanceDialogue(); // Click to advance
         }
     }
 

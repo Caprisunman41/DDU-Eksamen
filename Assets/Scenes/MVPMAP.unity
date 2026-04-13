@@ -656,6 +656,7 @@ MonoBehaviour:
   health: 4
   maxHealth: 2
   isDead: 0
+  invincibilityDuration: 1
 --- !u!1 &94488444
 GameObject:
   m_ObjectHideFlags: 0
@@ -13304,6 +13305,8 @@ MonoBehaviour:
   characterController: {fileID: 91385629}
   playerHealth: {fileID: 91385635}
   normalEnemy: 0.5
+  attackCooldown: 0.8
+  _attackTimer: 0
 --- !u!70 &1665480231
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -13434,7 +13437,8 @@ MonoBehaviour:
   patrolDestination: 0
   playerTransform: {fileID: 91385627}
   isChasing: 0
-  chaseDistance: 2
+  chaseDistance: 8
+  stopChaseDistance: 7
 --- !u!50 &1665480235
 Rigidbody2D:
   serializedVersion: 5

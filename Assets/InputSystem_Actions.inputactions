@@ -155,7 +155,7 @@
                 {
                     "name": "",
                     "id": "f2e9ba44-c423-42a7-ad56-f20975884794",
-                    "path": "<Keyboard>/leftShift",
+                    "path": "<Keyboard>/q",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
@@ -177,7 +177,7 @@
                 {
                     "name": "",
                     "id": "8606242f-ea3f-4732-bff7-7931f51e8062",
-                    "path": "<Keyboard>/q",
+                    "path": "<Keyboard>/leftShift",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",

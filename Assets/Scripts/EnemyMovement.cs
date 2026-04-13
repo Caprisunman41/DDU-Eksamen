@@ -8,6 +8,7 @@ public class EnemyMovement : MonoBehaviour
     public Transform playerTransform;
     public bool isChasing;
     public float chaseDistance;
+    public float stopChaseDistance = 8f;
 
     private Rigidbody2D rb;
 
@@ -19,9 +20,20 @@ public class EnemyMovement : MonoBehaviour
     void FixedUpdate()
     {
         if (playerTransform == null) return;
+        
+        float distToPlayer = Vector2.Distance(transform.position, playerTransform.position);
 
-        if (!isChasing && Vector2.Distance(transform.position, playerTransform.position) < chaseDistance)
+        if (!isChasing && distToPlayer < chaseDistance)
             isChasing = true;
+
+        if (isChasing && distToPlayer > stopChaseDistance)
+        {
+            isChasing = false;
+
+            float distToPoint0 = Mathf.Abs(transform.position.x - patrolPoints[0].position.x);
+            float distToPoint1 = Mathf.Abs(transform.position.x - patrolPoints[1].position.x);
+            patrolDestination = distToPoint0 < distToPoint1 ? 0 : 1;
+        }
 
         if (isChasing)
         {
@@ -38,35 +50,26 @@ public class EnemyMovement : MonoBehaviour
         }
         else
         {
-            if (patrolDestination == 0)
-            {
-                rb.linearVelocity = new Vector2(-moveSpeed, rb.linearVelocity.y);
+            float targetX = patrolPoints[patrolDestination].position.x;
+            float direction = targetX > transform.position.x ? 1f : -1f;
 
-                if (Mathf.Abs(transform.position.x - patrolPoints[0].position.x) < .2f)
-                {
-                    transform.localScale = new Vector3(2f, 2f, 2f);
-                    patrolDestination = 1;
-                }
-            }
-            else if (patrolDestination == 1)
-            {
-                rb.linearVelocity = new Vector2(moveSpeed, rb.linearVelocity.y);
+            rb.linearVelocity = new Vector2(direction * moveSpeed, rb.linearVelocity.y);
+            transform.localScale = new Vector3(-direction * 2f, 2f, 2f);
 
-                if (Mathf.Abs(transform.position.x - patrolPoints[1].position.x) < .2f)
-                {
-                    transform.localScale = new Vector3(-2f, 2f, 2f);
-                    patrolDestination = 0;
-                }
+            if (Mathf.Abs(transform.position.x - targetX) < 0.2f)
+            {
+                patrolDestination = patrolDestination == 0 ? 1 : 0;
             }
         }
     }
     private void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.gameObject.CompareTag("Player"))
-        {
-            CharacterController player = col.gameObject.GetComponent<CharacterController>();
-            bool fromRight = transform.position.x > col.transform.position.x;
-            player.TakeKnockback(fromRight);
-        }
+        CharacterController player = col.gameObject.GetComponent<CharacterController>();
+        PlayerHealth ph = col.gameObject.GetComponent<PlayerHealth>();
+            
+        if (ph != null && ph.IsInvincible) return;
+
+        bool fromRight = transform.position.x > col.transform.position.x;
+        player.TakeKnockback(fromRight);
     }
 }

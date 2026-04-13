@@ -8,6 +8,7 @@ public class PlayerHealth : MonoBehaviour
     public bool isDead = false;
     public float invincibilityDuration = 1f;
     private bool _isInvincible = false;
+    public bool IsInvincible => _isInvincible;
 
     void Start()
     {

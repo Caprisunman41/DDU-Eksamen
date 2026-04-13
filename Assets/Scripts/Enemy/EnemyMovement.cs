@@ -9,6 +9,7 @@ public class EnemyMovement : MonoBehaviour
     public bool isChasing;
     public float chaseDistance;
     public float stopChaseDistance = 8f;
+	public bool isKnockedBack = false;
 
     private Rigidbody2D rb;
 
@@ -19,6 +20,8 @@ public class EnemyMovement : MonoBehaviour
 
     void FixedUpdate()
     {
+		if (isKnockedBack) return;
+
         if (playerTransform == null) return;
         
         float distToPlayer = Vector2.Distance(transform.position, playerTransform.position);
@@ -67,7 +70,9 @@ public class EnemyMovement : MonoBehaviour
         CharacterController player = col.gameObject.GetComponent<CharacterController>();
         PlayerHealth ph = col.gameObject.GetComponent<PlayerHealth>();
             
-        if (ph != null && ph.IsInvincible) return;
+        if (player == null || ph == null) return;
+        
+        if (ph.IsInvincible) return;
 
         bool fromRight = transform.position.x > col.transform.position.x;
         player.TakeKnockback(fromRight);

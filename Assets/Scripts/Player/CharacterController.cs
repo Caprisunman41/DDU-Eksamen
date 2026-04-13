@@ -210,6 +210,7 @@ public class CharacterController : MonoBehaviour
         // FIX 2: Apply gravity when falling naturally (not jumping or fast falling)
         if (!_isJumping && !_isFastFalling && !_isGrounded)
         {
+			if (_isDashing) return;
             _isFalling = true;
             VerticalVelocity += MoveStats.Gravity * Time.fixedDeltaTime;
         }
@@ -317,6 +318,7 @@ public class CharacterController : MonoBehaviour
             if (_dashTimer <= 0f)
             {
                 _isDashing = false;
+				VerticalVelocity = 0f;
                 _rb.linearVelocity = new Vector2(_dashDirection.x * (MoveStats.DashSpeed * 0.3f), 0f);
             }
             return;

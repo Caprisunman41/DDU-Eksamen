@@ -4,6 +4,7 @@ public class PlayerAttack : MonoBehaviour
 {
     private GameObject attackArea = default;
     private PolygonCollider2D attackCollider;
+    private Animator animator;
 
     private bool attacking = false;
     private float timeToAttack = 0.25f;
@@ -14,6 +15,7 @@ public class PlayerAttack : MonoBehaviour
         attackArea = transform.GetChild(0).GetChild(1).gameObject; // Colliders -> attackArea
         attackCollider = attackArea.GetComponent<PolygonCollider2D>();
         attackCollider.enabled = false;
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -32,6 +34,7 @@ public class PlayerAttack : MonoBehaviour
                 timer = 0;
                 attacking = false;
                 attackCollider.enabled = false;
+                animator.SetBool("isAttacking", false);
             }
         }
     }
@@ -40,5 +43,6 @@ public class PlayerAttack : MonoBehaviour
     {
         attacking = true;
         attackCollider.enabled = true;
+        animator.SetBool("isAttacking", true);
     }
 }

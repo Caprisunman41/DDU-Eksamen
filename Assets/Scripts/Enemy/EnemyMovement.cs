@@ -1,5 +1,4 @@
 using UnityEngine;
-
 public class EnemyMovement : MonoBehaviour
 {
     public Transform[] patrolPoints;
@@ -9,8 +8,7 @@ public class EnemyMovement : MonoBehaviour
     public bool isChasing;
     public float chaseDistance;
     public float stopChaseDistance = 8f;
-	public bool isKnockedBack = false;
-
+    public bool isKnockedBack = false;
     private Rigidbody2D rb;
 
     void Start()
@@ -20,19 +18,15 @@ public class EnemyMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-		if (isKnockedBack) return;
-
+        if (isKnockedBack) return;
         if (playerTransform == null) return;
-        
-        float distToPlayer = Vector2.Distance(transform.position, playerTransform.position);
 
+        float distToPlayer = Vector2.Distance(transform.position, playerTransform.position);
         if (!isChasing && distToPlayer < chaseDistance)
             isChasing = true;
-
         if (isChasing && distToPlayer > stopChaseDistance)
         {
             isChasing = false;
-
             float distToPoint0 = Mathf.Abs(transform.position.x - patrolPoints[0].position.x);
             float distToPoint1 = Mathf.Abs(transform.position.x - patrolPoints[1].position.x);
             patrolDestination = distToPoint0 < distToPoint1 ? 0 : 1;
@@ -42,12 +36,12 @@ public class EnemyMovement : MonoBehaviour
         {
             if (transform.position.x > playerTransform.position.x)
             {
-                transform.localScale = new Vector3(2f, 2f, 2f);
+                transform.localScale = new Vector3(1f, 1f, 1f);  // was 2f
                 rb.linearVelocity = new Vector2(-moveSpeed, rb.linearVelocity.y);
             }
             else if (transform.position.x < playerTransform.position.x)
             {
-                transform.localScale = new Vector3(-2f, 2f, 2f);
+                transform.localScale = new Vector3(-1f, 1f, 1f); // was -2f, 2f, 2f
                 rb.linearVelocity = new Vector2(moveSpeed, rb.linearVelocity.y);
             }
         }
@@ -55,23 +49,21 @@ public class EnemyMovement : MonoBehaviour
         {
             float targetX = patrolPoints[patrolDestination].position.x;
             float direction = targetX > transform.position.x ? 1f : -1f;
-
             rb.linearVelocity = new Vector2(direction * moveSpeed, rb.linearVelocity.y);
-            transform.localScale = new Vector3(-direction * 2f, 2f, 2f);
-
+            transform.localScale = new Vector3(-direction * 1f, 1f, 1f); // was 2f
             if (Mathf.Abs(transform.position.x - targetX) < 0.2f)
             {
                 patrolDestination = patrolDestination == 0 ? 1 : 0;
             }
         }
     }
+
     private void OnCollisionEnter2D(Collision2D col)
     {
         CharacterController player = col.gameObject.GetComponent<CharacterController>();
         PlayerHealth ph = col.gameObject.GetComponent<PlayerHealth>();
-            
+
         if (player == null || ph == null) return;
-        
         if (ph.IsInvincible) return;
 
         bool fromRight = transform.position.x > col.transform.position.x;

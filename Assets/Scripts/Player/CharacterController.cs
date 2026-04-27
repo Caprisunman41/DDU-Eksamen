@@ -12,6 +12,7 @@ public class CharacterController : MonoBehaviour
 
     // movement variables
     private Vector2 _moveVelocity;
+    private Vector2 _smoothDampVelocity;
     private bool _isFacingRight;
 
     // collision check variables
@@ -49,6 +50,15 @@ public class CharacterController : MonoBehaviour
 	private float _dashTimer;
 	private Vector2 _dashDirection;
     private float _dashCooldownTimer;
+    private float _dashCurrentSpeed;
+    public float DashCooldownProgress
+    {
+        get
+        {
+            if (_canDash && _dashCooldownTimer <= 0f) return 1f;
+            return 1f - Mathf.Clamp01(_dashCooldownTimer / MoveStats.DashCooldown);
+        }
+    }
     
     //KB
     public float kbForce;
@@ -81,8 +91,11 @@ public class CharacterController : MonoBehaviour
         if (kbCounter > 0)
         {
             kbCounter -= Time.fixedDeltaTime;
+            float t = 1f - Mathf.Clamp01(kbCounter / kbTotalTime);
             float kbX = knockFromRight ? -kbForce : kbForce;
-            _rb.linearVelocity = new Vector2(kbX, kbForce);
+            Vector2 kbVelocity = new Vector2(kbX, kbForce * 0.5f);
+            _rb.linearVelocity = Vector2.Lerp(kbVelocity, Vector2.zero, t);
+            _moveVelocity = new Vector2(_rb.linearVelocity.x, 0f);
         }
         else
         {
@@ -99,7 +112,7 @@ public class CharacterController : MonoBehaviour
     {
 		if (_isDashing) return;
 		
-        if (moveInput != Vector2.zero)
+        if (moveInput.magnitude > 0.01f)
         {
             TurnCheck(moveInput);
 
@@ -107,12 +120,12 @@ public class CharacterController : MonoBehaviour
                 ? new Vector2(moveInput.x, 0f) * MoveStats.MaxRunSpeed
                 : new Vector2(moveInput.x, 0f) * MoveStats.MaxWalkSpeed;
 
-            _moveVelocity = Vector2.Lerp(_moveVelocity, targetVelocity, acceleration * Time.fixedDeltaTime);
+            _moveVelocity = Vector2.SmoothDamp(_moveVelocity, targetVelocity, ref _smoothDampVelocity, 1f / acceleration);
             _rb.linearVelocity = new Vector2(_moveVelocity.x, _rb.linearVelocity.y);
         }
         else
         {
-            _moveVelocity = Vector2.Lerp(_moveVelocity, Vector2.zero, deceleration * Time.fixedDeltaTime);
+            _moveVelocity = Vector2.SmoothDamp(_moveVelocity, Vector2.zero, ref _smoothDampVelocity, 1f / deceleration);
             _rb.linearVelocity = new Vector2(_moveVelocity.x, _rb.linearVelocity.y);
         }
     }
@@ -207,10 +220,10 @@ public class CharacterController : MonoBehaviour
 
     private void Jump()
     {
-        // FIX 2: Apply gravity when falling naturally (not jumping or fast falling)
+        if (_isDashing) return;
+
         if (!_isJumping && !_isFastFalling && !_isGrounded)
         {
-			if (_isDashing) return;
             _isFalling = true;
             VerticalVelocity += MoveStats.Gravity * Time.fixedDeltaTime;
         }
@@ -277,20 +290,18 @@ public class CharacterController : MonoBehaviour
 
     private void DashChecks()
     {
-        if (_dashCooldownTimer > 0f)
-            _dashCooldownTimer -= Time.deltaTime;
-
         if (InputManager.DashWasPressed && _canDash && _dashCooldownTimer <= 0f)
         {
             _isDashing = true;
             _canDash = false;
             _dashTimer = MoveStats.DashDuration;
             _dashCooldownTimer = MoveStats.DashCooldown;
+            _dashCurrentSpeed = 0f;
             
 			Vector2 input = InputManager.Movement;
 			Debug.Log("Raw input: " + input);
 
-			if (input == Vector2.zero)
+			if (input.magnitude <= 0.01f)
 			{
     			_dashDirection = new Vector2(_isFacingRight ? 1f : -1f, 0f);
 			}
@@ -311,15 +322,17 @@ public class CharacterController : MonoBehaviour
     {
         if (_isDashing)
         {
-			Debug.Log("Dashing with direction" + _dashDirection);
             _dashTimer -= Time.fixedDeltaTime;
-            _rb.linearVelocity = _dashDirection * MoveStats.DashSpeed;
+
+            float rampRate = MoveStats.DashSpeed / (MoveStats.DashDuration * 0.25f);
+            _dashCurrentSpeed = Mathf.MoveTowards(_dashCurrentSpeed, MoveStats.DashSpeed, rampRate * Time.fixedDeltaTime);
+            _rb.linearVelocity = _dashDirection * _dashCurrentSpeed;
 
             if (_dashTimer <= 0f)
             {
                 _isDashing = false;
-				VerticalVelocity = 0f;
-                _rb.linearVelocity = new Vector2(_dashDirection.x * (MoveStats.DashSpeed * 0.3f), 0f);
+                _moveVelocity = new Vector2(_dashDirection.x * (_dashCurrentSpeed * 0.5f), 0f);
+                _smoothDampVelocity = Vector2.zero;
             }
             return;
         }
@@ -402,6 +415,8 @@ public class CharacterController : MonoBehaviour
     private void CountTimers()
     {
         _jumpBufferTimer -= Time.deltaTime;
+        if (_dashCooldownTimer > 0f)
+            _dashCooldownTimer -= Time.deltaTime;
 
         if (!_isGrounded)
             _coyoteTimer -= Time.deltaTime;

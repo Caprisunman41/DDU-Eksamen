@@ -17,19 +17,21 @@ public class EnemyDamage : MonoBehaviour
     
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Player" && _attackTimer <= 0f)
+        HandlePlayerHit(collision);
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        HandlePlayerHit(collision);
+    }
+
+    private void HandlePlayerHit(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player") && _attackTimer <= 0f)
         {
             _attackTimer = attackCooldown;
-            
-            characterController.kbCounter = characterController.kbTotalTime;
-            if (collision.transform.position.x <= transform.position.x)
-            {
-                characterController.knockFromRight = true;
-            }
-            if (collision.transform.position.x > transform.position.x)
-            {
-                characterController.knockFromRight = false;
-            }
+            bool fromRight = collision.transform.position.x <= transform.position.x;
+            characterController.TakeKnockback(fromRight);
             playerHealth.TakeDamage(normalEnemy);
         }
     }

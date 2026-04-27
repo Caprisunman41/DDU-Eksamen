@@ -10,6 +10,7 @@ public class EnemyHealth : MonoBehaviour
     public float knockbackDuration = 0.15f;
 
 	private Rigidbody2D rb;
+    private Coroutine _knockbackCoroutine;
 
     void Start()
     {
@@ -22,7 +23,9 @@ public class EnemyHealth : MonoBehaviour
         if (isDead) return;
 
         health -= amount;
-		StartCoroutine(Knockback(knockbackDir));
+
+        if (_knockbackCoroutine != null) StopCoroutine(_knockbackCoroutine);
+        _knockbackCoroutine = StartCoroutine(Knockback(knockbackDir));
 
         if (health <= 0)
         {
@@ -30,17 +33,23 @@ public class EnemyHealth : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
 	private IEnumerator Knockback(Vector2 direction)
 	{
-    	Debug.Log("Knockback retning: " + direction + " kraft: " + knockbackForce);
-    
     	EnemyMovement movement = GetComponent<EnemyMovement>();
     	if (movement != null) movement.isKnockedBack = true;
 
-    	rb.linearVelocity = new Vector2(direction.x * knockbackForce, knockbackForce * 0.5f);
-    	yield return new WaitForSeconds(knockbackDuration);
-    	rb.linearVelocity = Vector2.zero;
+        Vector2 initialVelocity = new Vector2(direction.x * knockbackForce, knockbackForce * 0.5f);
+        float elapsed = 0f;
 
+        while (elapsed < knockbackDuration)
+        {
+            rb.linearVelocity = Vector2.Lerp(initialVelocity, Vector2.zero, elapsed / knockbackDuration);
+            elapsed += Time.fixedDeltaTime;
+            yield return new WaitForFixedUpdate();
+        }
+
+    	rb.linearVelocity = Vector2.zero;
     	if (movement != null) movement.isKnockedBack = false;
 	}
 }

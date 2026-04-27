@@ -40,6 +40,13 @@ public class ControllerStats : ScriptableObject
     [Header("Jump Coyote Time")]
     [Range(0f, 1f)] public float JumpCoyoteTime = 0.1f;
 
+    [Header("Wall")]
+    [Range(0f, 10f)] public float WallSlideSpeed = 2f;
+    [Range(0f, 20f)] public float WallJumpForce = 12f;
+    [Range(0f, 0.5f)] public float WallDetectionRayLength = 0.05f;
+    [Range(0f, 5f)] public float WallSlideMaxDuration = 2f;
+    [Range(0f, 1f)] public float WallJumpLockoutTime = 0.5f;
+
 	[Header("Dash")]
 	[Range(0f, 60f)] public float DashSpeed = 20f;
 	[Range(0f, 1f)] public float DashDuration = 0.15f;

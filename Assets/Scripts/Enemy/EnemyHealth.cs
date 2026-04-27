@@ -30,7 +30,9 @@ public class EnemyHealth : MonoBehaviour
         if (health <= 0)
         {
             isDead = true;
-            Destroy(gameObject);
+            if (ManaManager.Instance == null) Debug.LogError("ManaManager mangler i scenen");
+            else ManaManager.Instance.OnEnemyKilled();
+            gameObject.SetActive(false);
         }
     }
 

@@ -47,6 +47,14 @@ public class PauseMenu : MonoBehaviour
         
     }
 
+    public void RespawnButton()
+    {
+        Container.SetActive(false);
+        Time.timeScale = 1f;
+        isPaused = false;
+        playerHealth.Respawn();
+    }
+
     public void RestartButton()
     {
         Time.timeScale = 1f;

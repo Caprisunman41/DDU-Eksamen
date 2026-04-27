@@ -8,6 +8,8 @@ public class EnemyMovement : MonoBehaviour
     public bool isChasing;
     public float chaseDistance;
     public float stopChaseDistance = 8f;
+    [Tooltip("Stop chasing when closer than this. 0 = chase all the way (melee)")]
+    public float stopAtRange = 0f;
     public bool isKnockedBack = false;
     private Rigidbody2D rb;
 
@@ -34,14 +36,18 @@ public class EnemyMovement : MonoBehaviour
 
         if (isChasing)
         {
-            if (transform.position.x > playerTransform.position.x)
+            if (stopAtRange > 0f && distToPlayer <= stopAtRange)
             {
-                transform.localScale = new Vector3(1f, 1f, 1f);  // was 2f
+                rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+            }
+            else if (transform.position.x > playerTransform.position.x)
+            {
+                transform.localScale = new Vector3(1f, 1f, 1f);
                 rb.linearVelocity = new Vector2(-moveSpeed, rb.linearVelocity.y);
             }
             else if (transform.position.x < playerTransform.position.x)
             {
-                transform.localScale = new Vector3(-1f, 1f, 1f); // was -2f, 2f, 2f
+                transform.localScale = new Vector3(-1f, 1f, 1f);
                 rb.linearVelocity = new Vector2(moveSpeed, rb.linearVelocity.y);
             }
         }

@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 
@@ -13,9 +14,21 @@ public class NPC : MonoBehaviour, IInteractable
     private bool isTyping, isDialogueActive;
     private bool isChoosingOption;
 
+    private CharacterController _playerController;
+    private PlayerAttack _playerAttack;
+    private Rigidbody2D _playerRb;
+
     private void Start()
     {
-      dialogueUI = DialogueController.Instance;
+        dialogueUI = DialogueController.Instance;
+
+        GameObject player = GameObject.FindWithTag("Player");
+        if (player != null)
+        {
+            _playerController = player.GetComponent<CharacterController>();
+            _playerAttack = player.GetComponent<PlayerAttack>();
+            _playerRb = player.GetComponent<Rigidbody2D>();
+        }
     }
 
     public bool CanInteract()
@@ -31,6 +44,26 @@ public class NPC : MonoBehaviour, IInteractable
 
         if (!isDialogueActive)
             StartDialogue();
+    }
+
+    private void Update()
+    {
+        if (!isDialogueActive || !isChoosingOption) return;
+
+        if (Keyboard.current.digit1Key.wasPressedThisFrame) SelectChoice(0);
+        if (Keyboard.current.digit2Key.wasPressedThisFrame) SelectChoice(1);
+    }
+
+    private void SelectChoice(int index)
+    {
+        foreach (DialogueChoice choice in dialogueData.dialogueChoices)
+        {
+            if (choice.dialogueIndex == dialogueIndex && index < choice.choices.Length)
+            {
+                ChooseOption(choice.nextDialogueIndexes[index]);
+                return;
+            }
+        }
     }
 
     private float advanceCooldown;
@@ -58,11 +91,13 @@ public class NPC : MonoBehaviour, IInteractable
         isDialogueActive = true;
         dialogueIndex = 0;
 
-        
-        dialogueUI.SetNPCInfo(dialogueData.npcName);
-        dialogueUI.showDialogueUI(true); 
+        if (_playerController != null) _playerController.enabled = false;
+        if (_playerAttack != null) _playerAttack.enabled = false;
+        if (_playerRb != null) _playerRb.linearVelocity = Vector2.zero;
 
-        
+        dialogueUI.SetNPCInfo(dialogueData.npcName);
+        dialogueUI.showDialogueUI(true);
+
         DisplayCurrentLine();
     }
 
@@ -73,6 +108,7 @@ public class NPC : MonoBehaviour, IInteractable
             StopAllCoroutines();
             dialogueUI.SetDialogueText(dialogueData.dialogueLines[dialogueIndex]);
             isTyping = false;
+            return;
         }
 
         //clear choices
@@ -150,6 +186,10 @@ public class NPC : MonoBehaviour, IInteractable
     {
         StopAllCoroutines();
         isDialogueActive = false;
+
+        if (_playerController != null) _playerController.enabled = true;
+        if (_playerAttack != null) _playerAttack.enabled = true;
+
         dialogueUI.SetDialogueText("");
         dialogueUI.showDialogueUI(false);
     }

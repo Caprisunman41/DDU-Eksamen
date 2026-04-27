@@ -31,6 +31,14 @@ public class GameOver : MonoBehaviour
         
     }
 
+    public void RespawnButton()
+    {
+        gameOver = false;
+        Container1.SetActive(false);
+        Time.timeScale = 1f;
+        playerHealth.Respawn();
+    }
+
     public void RestartButton()
     {
         Time.timeScale = 1f;

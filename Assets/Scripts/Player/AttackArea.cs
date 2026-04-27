@@ -8,7 +8,14 @@ public class AttackArea : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        EnemyHealth enemy = collider.GetComponent<EnemyHealth>();
+        EnemyProjectile proj = collider.GetComponentInParent<EnemyProjectile>();
+        if (proj != null)
+        {
+            Destroy(proj.gameObject);
+            return;
+        }
+
+        EnemyHealth enemy = collider.GetComponentInParent<EnemyHealth>();
         if (enemy != null && !_hitEnemies.Contains(enemy))
         {
             _hitEnemies.Add(enemy);

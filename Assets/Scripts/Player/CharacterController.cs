@@ -14,6 +14,7 @@ public class CharacterController : MonoBehaviour
     private Vector2 _moveVelocity;
     private Vector2 _smoothDampVelocity;
     private bool _isFacingRight;
+    public bool IsFacingRight => _isFacingRight;
 
     // collision check variables
     private RaycastHit2D _groundHit;
@@ -44,6 +45,14 @@ public class CharacterController : MonoBehaviour
     // coyote time
     private float _coyoteTimer;
 
+    // wall variables
+    private bool _isTouchingWallRight;
+    private bool _isTouchingWallLeft;
+    private bool _isWallSliding;
+    private float _wallJumpTimer;
+    private float _wallSlideTimer;
+    private bool _wallSlideExhausted;
+
 	//dash variables
 	private bool _isDashing;
 	private bool _canDash = true;
@@ -72,7 +81,10 @@ public class CharacterController : MonoBehaviour
     {
         _isFacingRight = true;
         _rb = GetComponent<Rigidbody2D>();
-        _rb.gravityScale = 0f; // FIX 1: Disable Unity's built-in gravity
+        _rb.gravityScale = 0f;
+
+        PhysicsMaterial2D noFriction = new PhysicsMaterial2D { friction = 0f, bounciness = 0f };
+        _bodyColl.sharedMaterial = noFriction;
     }
 
     private void Update()
@@ -114,7 +126,7 @@ public class CharacterController : MonoBehaviour
 		
         if (moveInput.magnitude > 0.01f)
         {
-            TurnCheck(moveInput);
+            if (!_isWallSliding) TurnCheck(moveInput);
 
             Vector2 targetVelocity = InputManager.RunIsHeld
                 ? new Vector2(moveInput.x, 0f) * MoveStats.MaxRunSpeed
@@ -176,6 +188,18 @@ public class CharacterController : MonoBehaviour
             }
         }
 
+        if (InputManager.JumpWasPressed && _isWallSliding)
+        {
+            float wallDir = _isTouchingWallRight ? -1f : 1f;
+            _moveVelocity = new Vector2(wallDir * MoveStats.WallJumpForce, 0f);
+            _smoothDampVelocity = Vector2.zero;
+            _wallJumpTimer = MoveStats.WallJumpLockoutTime;
+            _wallSlideTimer = 0f;
+            _numberOfJumpsUsed = 0;
+            InitiateJump(1);
+            return;
+        }
+
         if (_jumpBufferTimer > 0f && !_isJumping && (_isGrounded || _coyoteTimer > 0f))
         {
             InitiateJump(1);
@@ -205,8 +229,9 @@ public class CharacterController : MonoBehaviour
             _fastFallTime = 0f;
             _isPastApexThreshold = false;
             _numberOfJumpsUsed = 0;
+            _smoothDampVelocity = Vector2.zero;
 
-            VerticalVelocity = -2f; // FIX 3: Use small grounding value instead of Physics2D.gravity.y
+            VerticalVelocity = -2f;
         }
     }
 
@@ -221,6 +246,39 @@ public class CharacterController : MonoBehaviour
     private void Jump()
     {
         if (_isDashing) return;
+
+        bool pressingIntoWall = (_isTouchingWallRight && InputManager.Movement.x > 0.01f) ||
+                                (_isTouchingWallLeft  && InputManager.Movement.x < -0.01f);
+
+        bool touchingWall = _isTouchingWallRight || _isTouchingWallLeft;
+
+        if (!touchingWall)
+        {
+            _wallSlideTimer = 0f;
+            _wallSlideExhausted = false;
+        }
+
+        _isWallSliding = !_isGrounded && touchingWall && VerticalVelocity < 0f && _wallJumpTimer <= 0f && !_wallSlideExhausted;
+
+        if (_isWallSliding)
+        {
+            if (_isTouchingWallRight && _isFacingRight) Turn(false);
+            else if (_isTouchingWallLeft && !_isFacingRight) Turn(true);
+
+            _wallSlideTimer += Time.fixedDeltaTime;
+
+            if (_wallSlideTimer >= MoveStats.WallSlideMaxDuration)
+            {
+                _isWallSliding = false;
+                _wallSlideExhausted = true;
+            }
+            else
+            {
+                VerticalVelocity = Mathf.Max(VerticalVelocity, -MoveStats.WallSlideSpeed);
+                _rb.linearVelocity = new Vector2(_rb.linearVelocity.x, VerticalVelocity);
+                return;
+            }
+        }
 
         if (!_isJumping && !_isFastFalling && !_isGrounded)
         {
@@ -299,7 +357,6 @@ public class CharacterController : MonoBehaviour
             _dashCurrentSpeed = 0f;
             
 			Vector2 input = InputManager.Movement;
-			Debug.Log("Raw input: " + input);
 
 			if (input.magnitude <= 0.01f)
 			{
@@ -361,10 +418,7 @@ public class CharacterController : MonoBehaviour
         );
 
         _isGrounded = _groundHit.collider != null;
-        Debug.Log("Grounded: " + _isGrounded);
         DebugGround(capsuleCastOrigin, capsuleCastSize);
-        Debug.Log("Origin: " + capsuleCastOrigin + "  Size: " + capsuleCastSize);
-        Debug.Log("Ground hit: " + (_groundHit.collider != null ? _groundHit.collider.name : "none"));
     }
 	private void BumpedHead()
 	{
@@ -404,8 +458,20 @@ public class CharacterController : MonoBehaviour
     private void CollisionChecks()
     {
         IsGrounded();
-		BumpedHead();
-		
+        BumpedHead();
+        DetectWalls();
+    }
+
+    private void DetectWalls()
+    {
+        float dist = _bodyColl.bounds.extents.x + MoveStats.WallDetectionRayLength;
+        Vector2 upper = new Vector2(_bodyColl.bounds.center.x, _bodyColl.bounds.max.y - 0.1f);
+        Vector2 lower = new Vector2(_bodyColl.bounds.center.x, _bodyColl.bounds.min.y + 0.1f);
+
+        _isTouchingWallRight = Physics2D.Raycast(upper, Vector2.right, dist, MoveStats.GroundLayer) ||
+                               Physics2D.Raycast(lower, Vector2.right, dist, MoveStats.GroundLayer);
+        _isTouchingWallLeft  = Physics2D.Raycast(upper, Vector2.left,  dist, MoveStats.GroundLayer) ||
+                               Physics2D.Raycast(lower, Vector2.left,  dist, MoveStats.GroundLayer);
     }
 
     #endregion
@@ -417,6 +483,8 @@ public class CharacterController : MonoBehaviour
         _jumpBufferTimer -= Time.deltaTime;
         if (_dashCooldownTimer > 0f)
             _dashCooldownTimer -= Time.deltaTime;
+        if (_wallJumpTimer > 0f)
+            _wallJumpTimer -= Time.deltaTime;
 
         if (!_isGrounded)
             _coyoteTimer -= Time.deltaTime;

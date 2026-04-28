@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4765227068506763597}
   - component: {fileID: 3551160430805236998}
   - component: {fileID: 7508294124645214349}
-  - component: {fileID: -1780666146804967087}
+  - component: {fileID: 6237730712786616338}
   m_Layer: 0
   m_Name: Bullet
   m_TagString: Untagged
@@ -28,13 +28,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1552584835028365653}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 41, y: -3.4, z: 0}
-  m_LocalScale: {x: 0.2, y: 0.05, z: 0.25}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &4765227068506763597
 SpriteRenderer:
   serializedVersion: 2
@@ -84,7 +84,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -9095717837082945937, guid: 207ee8102dd4143d288186ef0be518ee, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a1d26e757783333419109c532de3d071, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -136,8 +136,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!70 &-1780666146804967087
-CapsuleCollider2D:
+--- !u!60 &6237730712786616338
+PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -171,5 +171,27 @@ CapsuleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1.0000002, y: 2.0000005}
-  m_Direction: 0
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 2}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.056972504, y: 0.19612908}
+      - {x: -0.17240906, y: 0.06463361}
+      - {x: -0.5, y: 0.125}
+      - {x: -0.5, y: -0.09375}
+      - {x: -0.2888298, y: -0.083124876}
+      - {x: -0.06941223, y: -0.12886167}
+      - {x: 0.051136017, y: -0.22461033}
+      - {x: 0.2881775, y: -0.20916319}
+      - {x: 0.40216827, y: -0.15145636}
+      - {x: 0.42791367, y: 0.04119253}
+      - {x: 0.41761398, y: 0.13600922}
+      - {x: 0.29740906, y: 0.17791295}
+  m_UseDelaunayMesh: 1

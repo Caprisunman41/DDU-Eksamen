@@ -41,14 +41,18 @@ public class RangedAttack : MonoBehaviour
     {
         Vector2 direction = (_playerTransform.position - transform.position).normalized;
 
-        // Offset spawn point in the direction the enemy is actually facing
+        // Face the player before shooting
+        bool playerToRight = _playerTransform.position.x > transform.position.x;
+        transform.localScale = new Vector3(playerToRight ? -1f : 1f, 1f, 1f);
+
         float facingSign = transform.localScale.x >= 0f ? -1f : 1f;
         Vector2 localOffset = firePoint != null
             ? new Vector2(Mathf.Abs(firePoint.localPosition.x) * facingSign, firePoint.localPosition.y)
             : Vector2.zero;
         Vector2 spawnPos = (Vector2)transform.position + localOffset;
 
-        GameObject proj = Instantiate(projectilePrefab, spawnPos, Quaternion.identity);
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        GameObject proj = Instantiate(projectilePrefab, spawnPos, Quaternion.Euler(0f, 0f, angle));
         proj.GetComponent<EnemyProjectile>()?.Init(direction);
     }
 }

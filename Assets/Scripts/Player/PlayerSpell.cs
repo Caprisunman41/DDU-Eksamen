@@ -30,7 +30,8 @@ public class PlayerSpell : MonoBehaviour
         if (!ManaManager.Instance.TryUseMana()) { Debug.Log("Ingen mana"); return; }
 
         Vector2 direction = _controller.IsFacingRight ? Vector2.right : Vector2.left;
-        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.Euler(0f, 0f, angle));
         bullet.GetComponent<Bullet>().Init(direction);
         Debug.Log("Bullet spawnet i retning: " + direction);
     }

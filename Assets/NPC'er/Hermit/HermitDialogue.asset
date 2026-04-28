@@ -42,7 +42,12 @@ MonoBehaviour:
     - Yes, here you go.
     - Ew you stink.
     nextDialogueIndexes: 0600000004000000
+    goldCosts: 0a00000000000000
+    insufficientGoldIndexes: 
   - dialogueIndex: 7
     choices:
     - Yes... Where am i?
     nextDialogueIndexes: 08000000
+    goldCosts: 
+    insufficientGoldIndexes: 
+  paidDialogueStartIndex: 7

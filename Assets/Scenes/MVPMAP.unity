@@ -3640,7 +3640,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 2965537686317440536, guid: a739ddefcbccd483a96fb05c9c2bf854, type: 3}
+  m_Sprite: {fileID: -1674766330656853454, guid: 1e0e34fb7288c4b9ebd80b3e7d2f103c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3790,7 +3790,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 2965537686317440536, guid: a739ddefcbccd483a96fb05c9c2bf854, type: 3}
+  m_Sprite: {fileID: -1674766330656853454, guid: 1e0e34fb7288c4b9ebd80b3e7d2f103c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -15483,7 +15483,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 2965537686317440536, guid: a739ddefcbccd483a96fb05c9c2bf854, type: 3}
+  m_Sprite: {fileID: -1674766330656853454, guid: 1e0e34fb7288c4b9ebd80b3e7d2f103c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -15931,7 +15931,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 2965537686317440536, guid: a739ddefcbccd483a96fb05c9c2bf854, type: 3}
+  m_Sprite: {fileID: -1674766330656853454, guid: 1e0e34fb7288c4b9ebd80b3e7d2f103c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -16724,11 +16724,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0ae5c1dd6fe34c65afadd9819b12a84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealthDisplay
-  health: 4
-  maxHealth: 4
-  emptyHeart: {fileID: 2965537686317440536, guid: a739ddefcbccd483a96fb05c9c2bf854, type: 3}
-  halfHeart: {fileID: 4427620148290293584, guid: a739ddefcbccd483a96fb05c9c2bf854, type: 3}
-  fullHeart: {fileID: -8443174764446406429, guid: a739ddefcbccd483a96fb05c9c2bf854, type: 3}
+  emptyHeart: {fileID: -1674766330656853454, guid: 1e0e34fb7288c4b9ebd80b3e7d2f103c, type: 3}
+  fullHeartFrames:
+  - {fileID: 1436615285126785180, guid: 1e0e34fb7288c4b9ebd80b3e7d2f103c, type: 3}
+  - {fileID: -282667914762340339, guid: 1e0e34fb7288c4b9ebd80b3e7d2f103c, type: 3}
+  halfHeartFrames:
+  - {fileID: 4753571473312253495, guid: 1e0e34fb7288c4b9ebd80b3e7d2f103c, type: 3}
+  - {fileID: 9176670382494036272, guid: 1e0e34fb7288c4b9ebd80b3e7d2f103c, type: 3}
+  normalDuration: 1.5
+  fps: 3
   hearts:
   - {fileID: 1687790910}
   - {fileID: 955519117}

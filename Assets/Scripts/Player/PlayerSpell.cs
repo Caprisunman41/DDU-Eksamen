@@ -26,6 +26,7 @@ public class PlayerSpell : MonoBehaviour
         if (bulletPrefab == null) { Debug.LogError("Bullet Prefab ikke sat i Inspector"); return; }
         if (firePoint == null) { Debug.LogError("Fire Point ikke sat i Inspector"); return; }
 
+        if (InventoryManager.Instance != null && !InventoryManager.Instance.HasSpell) return;
         if (!ManaManager.Instance.TryUseMana()) { Debug.Log("Ingen mana"); return; }
 
         Vector2 direction = _controller.IsFacingRight ? Vector2.right : Vector2.left;

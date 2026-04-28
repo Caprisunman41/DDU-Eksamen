@@ -11,7 +11,8 @@ public class AttackArea : MonoBehaviour
         EnemyProjectile proj = collider.GetComponentInParent<EnemyProjectile>();
         if (proj != null)
         {
-            Destroy(proj.gameObject);
+            if (InventoryManager.Instance == null || InventoryManager.Instance.HasBulletBlock)
+                Destroy(proj.gameObject);
             return;
         }
 

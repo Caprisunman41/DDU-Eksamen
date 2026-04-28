@@ -23,6 +23,14 @@ public class Bullet : MonoBehaviour
     {
         if (other.CompareTag("Player") || other.transform.root.CompareTag("Player")) return;
 
+        EnemyProjectile enemyProj = other.GetComponentInParent<EnemyProjectile>();
+        if (enemyProj != null)
+        {
+            Destroy(enemyProj.gameObject);
+            Destroy(gameObject);
+            return;
+        }
+
         EnemyHealth enemy = other.GetComponentInParent<EnemyHealth>();
         if (enemy != null)
             enemy.TakeDamage(damage, _direction);

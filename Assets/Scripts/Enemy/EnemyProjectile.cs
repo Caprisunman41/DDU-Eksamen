@@ -15,10 +15,8 @@ public class EnemyProjectile : MonoBehaviour
         _initialized = true;
 
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
-        Debug.Log($"[EnemyProjectile] Init called. speed={speed}, direction={_direction}, hasRb={rb != null}");
         if (rb != null)
         {
-            Debug.Log($"[EnemyProjectile] RB bodyType={rb.bodyType}, velocity={rb.linearVelocity}, gravity={rb.gravityScale}");
             rb.bodyType = RigidbodyType2D.Kinematic;
             rb.linearVelocity = Vector2.zero;
             rb.gravityScale = 0f;
@@ -35,10 +33,10 @@ public class EnemyProjectile : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
+        if (other.transform.root.CompareTag("Player") && !other.isTrigger)
         {
-            other.GetComponent<PlayerHealth>()?.TakeDamage(damage);
-            other.GetComponent<CharacterController>()?.TakeKnockback(_direction.x < 0);
+            other.transform.root.GetComponent<PlayerHealth>()?.TakeDamage(damage);
+            other.transform.root.GetComponent<CharacterController>()?.TakeKnockback(_direction.x < 0);
             Destroy(gameObject);
         }
         else if (!other.CompareTag("Enemy") && !other.isTrigger)

@@ -188,7 +188,7 @@ public class CharacterController : MonoBehaviour
             }
         }
 
-        if (InputManager.JumpWasPressed && _isWallSliding)
+        if (InputManager.JumpWasPressed && _isWallSliding && (InventoryManager.Instance == null || InventoryManager.Instance.HasWallJump))
         {
             float wallDir = _isTouchingWallRight ? -1f : 1f;
             _moveVelocity = new Vector2(wallDir * MoveStats.WallJumpForce, 0f);
@@ -348,7 +348,7 @@ public class CharacterController : MonoBehaviour
 
     private void DashChecks()
     {
-        if (InputManager.DashWasPressed && _canDash && _dashCooldownTimer <= 0f)
+        if (InputManager.DashWasPressed && _canDash && _dashCooldownTimer <= 0f && (InventoryManager.Instance == null || InventoryManager.Instance.HasDash))
         {
             _isDashing = true;
             _canDash = false;

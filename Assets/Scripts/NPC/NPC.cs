@@ -13,6 +13,7 @@ public class NPC : MonoBehaviour, IInteractable
     private int dialogueIndex;
     private bool isTyping, isDialogueActive;
     private bool isChoosingOption;
+    private bool _hasPaid;
 
     private CharacterController _playerController;
     private PlayerAttack _playerAttack;
@@ -60,6 +61,18 @@ public class NPC : MonoBehaviour, IInteractable
         {
             if (choice.dialogueIndex == dialogueIndex && index < choice.choices.Length)
             {
+                int cost = (choice.goldCosts != null && index < choice.goldCosts.Length) ? choice.goldCosts[index] : 0;
+                if (cost > 0 && InventoryManager.Instance != null)
+                {
+                    if (!InventoryManager.Instance.TrySpendGold(cost))
+                    {
+                        int fallback = (choice.insufficientGoldIndexes != null && index < choice.insufficientGoldIndexes.Length)
+                            ? choice.insufficientGoldIndexes[index] : -1;
+                        if (fallback >= 0) ChooseOption(fallback);
+                        return;
+                    }
+                    _hasPaid = true;
+                }
                 ChooseOption(choice.nextDialogueIndexes[index]);
                 return;
             }
@@ -89,7 +102,9 @@ public class NPC : MonoBehaviour, IInteractable
     void StartDialogue()
     {
         isDialogueActive = true;
-        dialogueIndex = 0;
+        dialogueIndex = (_hasPaid && dialogueData.paidDialogueStartIndex >= 0)
+            ? dialogueData.paidDialogueStartIndex
+            : 0;
 
         if (_playerController != null) _playerController.enabled = false;
         if (_playerAttack != null) _playerAttack.enabled = false;
@@ -169,7 +184,22 @@ public class NPC : MonoBehaviour, IInteractable
         for (int i = 0; i < choice.choices.Length; i++)
         {
             int nextIndex = choice.nextDialogueIndexes[i];
-            dialogueUI.CreateChoiceButton(choice.choices[i], () => ChooseOption(nextIndex));
+            int cost = (choice.goldCosts != null && i < choice.goldCosts.Length) ? choice.goldCosts[i] : 0;
+            int fallback = (choice.insufficientGoldIndexes != null && i < choice.insufficientGoldIndexes.Length) ? choice.insufficientGoldIndexes[i] : -1;
+            string label = cost > 0 ? $"{choice.choices[i]} ({cost} guld)" : choice.choices[i];
+            dialogueUI.CreateChoiceButton(label, () =>
+            {
+                if (cost > 0 && InventoryManager.Instance != null)
+                {
+                    if (!InventoryManager.Instance.TrySpendGold(cost))
+                    {
+                        if (fallback >= 0) ChooseOption(fallback);
+                        return;
+                    }
+                    _hasPaid = true;
+                }
+                ChooseOption(nextIndex);
+            });
         }
     }
 

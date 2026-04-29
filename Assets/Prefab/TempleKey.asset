@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: TempleKey
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemName: Temple Key
-  icon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  icon: {fileID: 21300000, guid: db9d9bbf003994900bfca1f892e64b64, type: 3}
   description: A key to who knows where?
   maxStackSize: 1

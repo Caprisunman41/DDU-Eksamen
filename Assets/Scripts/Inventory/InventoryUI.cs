@@ -2,18 +2,39 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class InventoryUI : MonoBehaviour
 {
+    [Header("Panel")]
     [SerializeField] private GameObject panel;
+
+    [Header("Grid")]
+    [SerializeField] private Transform gridParent;
+    [SerializeField] private GameObject slotPrefab;
+
+    [Header("Abilities & Gold")]
     [SerializeField] private TMP_Text goldText;
-    [SerializeField] private TMP_Text itemsText;
     [SerializeField] private TMP_Text dashText;
     [SerializeField] private TMP_Text wallJumpText;
     [SerializeField] private TMP_Text spellText;
     [SerializeField] private TMP_Text bulletBlockText;
 
+    [Header("Description")]
+    [SerializeField] private GameObject descriptionPanel;
+    [SerializeField] private Image descriptionIcon;
+    [SerializeField] private TMP_Text descriptionNameText;
+    [SerializeField] private TMP_Text descriptionBodyText;
+
     private bool _isOpen;
+    private InventorySlot[] _slots;
+
+    private void Start()
+    {
+        BuildGrid();
+        panel.SetActive(false);
+        descriptionPanel.SetActive(false);
+    }
 
     private void Update()
     {
@@ -21,11 +42,27 @@ public class InventoryUI : MonoBehaviour
             Toggle();
     }
 
+    private void BuildGrid()
+    {
+        int count = InventoryManager.Instance.SlotCount;
+        _slots = new InventorySlot[count];
+
+        for (int i = 0; i < count; i++)
+        {
+            GameObject go = Instantiate(slotPrefab, gridParent);
+            _slots[i] = go.GetComponent<InventorySlot>();
+        }
+    }
+
     private void Toggle()
     {
         _isOpen = !_isOpen;
         panel.SetActive(_isOpen);
-        if (_isOpen) Refresh();
+        if (_isOpen)
+        {
+            descriptionPanel.SetActive(false);
+            Refresh();
+        }
     }
 
     private void Refresh()
@@ -33,16 +70,33 @@ public class InventoryUI : MonoBehaviour
         InventoryManager inv = InventoryManager.Instance;
         if (inv == null) return;
 
-        goldText.text = $"Guld: {inv.Gold}";
+        goldText.text = inv.Gold.ToString();
 
         SetAbility(dashText,        "Dash",         inv.HasDash);
         SetAbility(wallJumpText,    "Wall Jump",    inv.HasWallJump);
         SetAbility(spellText,       "Spell",        inv.HasSpell);
         SetAbility(bulletBlockText, "Bullet Block", inv.HasBulletBlock);
 
-        itemsText.text = inv.Items.Count == 0
-            ? "Ingen items"
-            : string.Join("\n", inv.Items.Select(i => i.itemName));
+        for (int i = 0; i < _slots.Length; i++)
+        {
+            int index = i;
+            _slots[i].Setup(inv.GetSlot(i), inv.GetStackCount(i), item => ShowDescription(item));
+        }
+    }
+
+    private void ShowDescription(ItemData item)
+    {
+        if (item == null)
+        {
+            descriptionPanel.SetActive(false);
+            return;
+        }
+
+        descriptionPanel.SetActive(true);
+        descriptionNameText.text = item.itemName;
+        descriptionBodyText.text = item.description;
+        descriptionIcon.sprite = item.icon;
+        descriptionIcon.enabled = item.icon != null;
     }
 
     private void SetAbility(TMP_Text label, string name, bool unlocked)

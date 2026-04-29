@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
@@ -14,16 +13,45 @@ public class InventoryManager : MonoBehaviour
     [Header("Starting Gold")]
     [SerializeField] private int startingGold = 10;
 
-    public int Gold { get; private set; }
-    public IReadOnlyList<ItemData> Items => _items;
+    [Header("Inventory")]
+    [SerializeField] private int slotCount = 20;
 
-    private readonly List<ItemData> _items = new();
+    public int Gold { get; private set; }
+    public int SlotCount => slotCount;
+
+    private ItemData[] _slots;
+    private int[] _stackCounts;
 
     private void Awake()
     {
         if (Instance != null) { Destroy(gameObject); return; }
         Instance = this;
         Gold = startingGold;
+        _slots = new ItemData[slotCount];
+        _stackCounts = new int[slotCount];
+    }
+
+    public ItemData GetSlot(int index) => _slots[index];
+    public int GetStackCount(int index) => _stackCounts[index];
+
+    public bool AddItemToSlot(ItemData item, int slotIndex)
+    {
+        if (slotIndex < 0 || slotIndex >= slotCount) return false;
+
+        if (_slots[slotIndex] == null)
+        {
+            _slots[slotIndex] = item;
+            _stackCounts[slotIndex] = 1;
+            return true;
+        }
+
+        if (_slots[slotIndex] == item && _stackCounts[slotIndex] < item.maxStackSize)
+        {
+            _stackCounts[slotIndex]++;
+            return true;
+        }
+
+        return false;
     }
 
     public bool TrySpendGold(int amount)
@@ -34,7 +62,6 @@ public class InventoryManager : MonoBehaviour
     }
 
     public void AddGold(int amount) { Gold += amount; }
-    public void AddItem(ItemData item) { _items.Add(item); }
 
     public void UnlockAbility(string ability)
     {

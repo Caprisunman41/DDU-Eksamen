@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class NPC : MonoBehaviour, IInteractable
 {
     public NPCDialogue dialogueData;
+    [SerializeField] private GameObject interactIndicator;
     private DialogueController dialogueUI;
 
     private int dialogueIndex;
@@ -32,9 +33,16 @@ public class NPC : MonoBehaviour, IInteractable
         }
     }
 
-    public bool CanInteract()
+    public bool CanInteract() => !isDialogueActive;
+
+    public void OnPlayerEnter()
     {
-        return !isDialogueActive;
+        if (interactIndicator != null) interactIndicator.SetActive(true);
+    }
+
+    public void OnPlayerExit()
+    {
+        if (interactIndicator != null) interactIndicator.SetActive(false);
     }
 
     public void Interact()

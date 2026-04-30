@@ -58,6 +58,7 @@ public class InventoryUI : MonoBehaviour
     {
         _isOpen = !_isOpen;
         panel.SetActive(_isOpen);
+        InputManager.IsBlocked = _isOpen;
         if (_isOpen)
         {
             descriptionPanel.SetActive(false);

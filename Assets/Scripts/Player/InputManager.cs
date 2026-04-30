@@ -5,6 +5,8 @@ public class InputManager : MonoBehaviour
 {
     public static PlayerInput PlayerInput;
 
+    public static bool IsBlocked;
+
     public static Vector2 Movement;
     public static bool JumpWasPressed;
     public static bool JumpIsHeld;
@@ -36,6 +38,19 @@ public class InputManager : MonoBehaviour
 
     private void Update()
     {
+        if (IsBlocked)
+        {
+            Movement = Vector2.zero;
+            JumpWasPressed = false;
+            JumpIsHeld = false;
+            JumpWasReleased = false;
+            RunIsHeld = false;
+            DashWasPressed = false;
+            AttackWasPressed = false;
+            SpellWasPressed = false;
+            return;
+        }
+
         Movement = _moveAction.ReadValue<Vector2>();
 
         JumpWasPressed = _jumpAction.WasPressedThisFrame();

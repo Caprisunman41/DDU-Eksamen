@@ -33,6 +33,7 @@ public class PauseMenu : MonoBehaviour
         Container.SetActive(true);
         Time.timeScale = 0f;
         isPaused = true;
+        InputManager.IsBlocked = true;
     }
 
     public void ResumeButton()
@@ -40,6 +41,7 @@ public class PauseMenu : MonoBehaviour
         Container.SetActive(false);
         Time.timeScale = 1f;
         isPaused = false;
+        InputManager.IsBlocked = false;
     }
 
     public void OptionsButton()

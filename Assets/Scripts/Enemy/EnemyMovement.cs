@@ -42,21 +42,21 @@ public class EnemyMovement : MonoBehaviour
             }
             else if (transform.position.x > playerTransform.position.x)
             {
-                transform.localScale = new Vector3(1f, 1f, 1f);
+                transform.localScale = new Vector3(2f, 2f, 2f);
                 rb.linearVelocity = new Vector2(-moveSpeed, rb.linearVelocity.y);
             }
             else if (transform.position.x < playerTransform.position.x)
             {
-                transform.localScale = new Vector3(-1f, 1f, 1f);
+                transform.localScale = new Vector3(-2f, 2f, 2f);
                 rb.linearVelocity = new Vector2(moveSpeed, rb.linearVelocity.y);
             }
         }
         else
         {
             float targetX = patrolPoints[patrolDestination].position.x;
-            float direction = targetX > transform.position.x ? 1f : -1f;
+            float direction = targetX > transform.position.x ? 2f : -2f;
             rb.linearVelocity = new Vector2(direction * moveSpeed, rb.linearVelocity.y);
-            transform.localScale = new Vector3(-direction * 1f, 1f, 1f); // was 2f
+            transform.localScale = new Vector3(-direction * 2f, 2f, 2f); // was 2f
             if (Mathf.Abs(transform.position.x - targetX) < 0.2f)
             {
                 patrolDestination = patrolDestination == 0 ? 1 : 0;

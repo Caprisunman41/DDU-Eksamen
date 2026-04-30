@@ -10,6 +10,7 @@ public class EnemyMovement : MonoBehaviour
     public float stopChaseDistance = 8f;
     [Tooltip("Stop chasing when closer than this. 0 = chase all the way (melee)")]
     public float stopAtRange = 0f;
+    public float spriteScale = 2.5f;
     public bool isKnockedBack = false;
     private Rigidbody2D rb;
 
@@ -39,24 +40,26 @@ public class EnemyMovement : MonoBehaviour
             if (stopAtRange > 0f && distToPlayer <= stopAtRange)
             {
                 rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+                bool playerToRight = playerTransform.position.x > transform.position.x;
+                transform.localScale = new Vector3(playerToRight ? -spriteScale : spriteScale, spriteScale, 1f);
             }
             else if (transform.position.x > playerTransform.position.x)
             {
-                transform.localScale = new Vector3(2f, 2f, 2f);
+                transform.localScale = new Vector3(spriteScale, spriteScale, 1f);
                 rb.linearVelocity = new Vector2(-moveSpeed, rb.linearVelocity.y);
             }
             else if (transform.position.x < playerTransform.position.x)
             {
-                transform.localScale = new Vector3(-2f, 2f, 2f);
+                transform.localScale = new Vector3(-spriteScale, spriteScale, 1f);
                 rb.linearVelocity = new Vector2(moveSpeed, rb.linearVelocity.y);
             }
         }
         else
         {
             float targetX = patrolPoints[patrolDestination].position.x;
-            float direction = targetX > transform.position.x ? 2f : -2f;
+            float direction = targetX > transform.position.x ? 1f : -1f;
             rb.linearVelocity = new Vector2(direction * moveSpeed, rb.linearVelocity.y);
-            transform.localScale = new Vector3(-direction * 2f, 2f, 2f); // was 2f
+            transform.localScale = new Vector3(-direction * spriteScale, spriteScale, 1f);
             if (Mathf.Abs(transform.position.x - targetX) < 0.2f)
             {
                 patrolDestination = patrolDestination == 0 ? 1 : 0;

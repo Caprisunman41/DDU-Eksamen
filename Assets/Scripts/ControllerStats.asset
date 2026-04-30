@@ -24,7 +24,7 @@ MonoBehaviour:
   GroundDetectionRayLength: 0.05
   HeadDetectionRayLength: 0.05
   HeadWidth: 0.75
-  JumpHeight: 3
+  JumpHeight: 4.2
   JumpHeightCompensationFactor: 1.05
   TimeTillJumpApex: 0.5
   GravityOnReleaseWithMultiplier: 2
@@ -40,8 +40,8 @@ MonoBehaviour:
   WallDetectionRayLength: 0.05
   WallSlideMaxDuration: 1.2
   WallJumpLockoutTime: 0.2
-  DashSpeed: 18
-  DashDuration: 0.18
+  DashSpeed: 32
+  DashDuration: 0.19
   DashCooldown: 0.45
   DebugShowIsGroundedBox: 1
   DebugShowHeadBumpBox: 1

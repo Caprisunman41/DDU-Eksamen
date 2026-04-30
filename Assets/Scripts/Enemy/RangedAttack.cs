@@ -43,7 +43,8 @@ public class RangedAttack : MonoBehaviour
 
         // Face the player before shooting
         bool playerToRight = _playerTransform.position.x > transform.position.x;
-        transform.localScale = new Vector3(playerToRight ? -1f : 1f, 1f, 1f);
+        float s = _movement != null ? _movement.spriteScale : 1f;
+        transform.localScale = new Vector3(playerToRight ? -s : s, s, 1f);
 
         float facingSign = transform.localScale.x >= 0f ? -1f : 1f;
         Vector2 localOffset = firePoint != null

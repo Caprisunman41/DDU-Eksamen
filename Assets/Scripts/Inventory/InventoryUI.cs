@@ -13,12 +13,14 @@ public class InventoryUI : MonoBehaviour
     [SerializeField] private Transform gridParent;
     [SerializeField] private GameObject slotPrefab;
 
-    [Header("Abilities & Gold")]
+    [Header("Gold")]
     [SerializeField] private TMP_Text goldText;
-    [SerializeField] private TMP_Text dashText;
-    [SerializeField] private TMP_Text wallJumpText;
-    [SerializeField] private TMP_Text spellText;
-    [SerializeField] private TMP_Text bulletBlockText;
+
+    [Header("Ability Icons")]
+    [SerializeField] private AbilitySlot dashSlot;
+    [SerializeField] private AbilitySlot wallJumpSlot;
+    [SerializeField] private AbilitySlot spellSlot;
+    [SerializeField] private AbilitySlot bulletBlockSlot;
 
     [Header("Description")]
     [SerializeField] private GameObject descriptionPanel;
@@ -64,6 +66,10 @@ public class InventoryUI : MonoBehaviour
             descriptionPanel.SetActive(false);
             Refresh();
         }
+        else
+        {
+            descriptionPanel.SetActive(false);
+        }
     }
 
     private void Refresh()
@@ -73,26 +79,24 @@ public class InventoryUI : MonoBehaviour
 
         goldText.text = inv.Gold.ToString();
 
-        SetAbility(dashText,        "Dash",         inv.HasDash);
-        SetAbility(wallJumpText,    "Wall Jump",    inv.HasWallJump);
-        SetAbility(spellText,       "Spell",        inv.HasSpell);
-        SetAbility(bulletBlockText, "Bullet Block", inv.HasBulletBlock);
+        SetupAbilitySlot(dashSlot,        inv.HasDash);
+        SetupAbilitySlot(wallJumpSlot,    inv.HasWallJump);
+        SetupAbilitySlot(spellSlot,       inv.HasSpell);
+        SetupAbilitySlot(bulletBlockSlot, inv.HasBulletBlock);
 
         for (int i = 0; i < _slots.Length; i++)
-        {
-            int index = i;
             _slots[i].Setup(inv.GetSlot(i), inv.GetStackCount(i), item => ShowDescription(item));
-        }
+    }
+
+    private void SetupAbilitySlot(AbilitySlot slot, bool unlocked)
+    {
+        if (slot == null) return;
+        slot.Setup(unlocked, ShowAbilityDescription, HideDescription);
     }
 
     private void ShowDescription(ItemData item)
     {
-        if (item == null)
-        {
-            descriptionPanel.SetActive(false);
-            return;
-        }
-
+        if (item == null) { descriptionPanel.SetActive(false); return; }
         descriptionPanel.SetActive(true);
         descriptionNameText.text = item.itemName;
         descriptionBodyText.text = item.description;
@@ -100,13 +104,17 @@ public class InventoryUI : MonoBehaviour
         descriptionIcon.enabled = item.icon != null;
     }
 
-    private void SetAbility(TMP_Text label, string name, bool unlocked)
+    private void ShowAbilityDescription(string abilityName, string description)
     {
-        Color c = unlocked ? Color.white : new Color(0.35f, 0.35f, 0.35f, 1f);
-        label.text = name;
-        label.color = c;
-        label.faceColor = c;
-        label.ForceMeshUpdate();
+        descriptionPanel.SetActive(true);
+        descriptionNameText.text = abilityName;
+        descriptionBodyText.text = description;
+        descriptionIcon.enabled = false;
+    }
+
+    private void HideDescription()
+    {
+        descriptionPanel.SetActive(false);
     }
 
     public void CloseInventory() => Toggle();

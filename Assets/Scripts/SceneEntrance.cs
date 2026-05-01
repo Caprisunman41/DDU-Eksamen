@@ -10,6 +10,9 @@ public class SceneEntrance : MonoBehaviour, IInteractable
 
     public void Interact()
     {
+        PlayerHealth ph = FindAnyObjectByType<PlayerHealth>();
+        if (ph != null) PlayerHealth.SavedHealth = ph.health;
+
         SceneManager.LoadScene(sceneName);
     }
 

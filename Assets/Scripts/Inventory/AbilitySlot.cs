@@ -9,7 +9,7 @@ public class AbilitySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     [SerializeField, TextArea] private string description;
 
     private Image _icon;
-    private Action<string, string> _onHoverEnter;
+    private Action<string, string, RectTransform> _onHoverEnter;
     private Action _onHoverExit;
 
     private void Awake()
@@ -17,7 +17,7 @@ public class AbilitySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         _icon = GetComponent<Image>();
     }
 
-    public void Setup(bool unlocked, Action<string, string> onHoverEnter, Action onHoverExit)
+    public void Setup(bool unlocked, Action<string, string, RectTransform> onHoverEnter, Action onHoverExit)
     {
         _onHoverEnter = onHoverEnter;
         _onHoverExit = onHoverExit;
@@ -27,7 +27,7 @@ public class AbilitySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (_icon.enabled)
-            _onHoverEnter?.Invoke(abilityName, description);
+            _onHoverEnter?.Invoke(abilityName, description, GetComponent<RectTransform>());
     }
 
     public void OnPointerExit(PointerEventData eventData)

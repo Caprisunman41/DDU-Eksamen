@@ -26,6 +26,7 @@ public class InventoryManager : MonoBehaviour
     {
         if (Instance != null) { Destroy(gameObject); return; }
         Instance = this;
+        DontDestroyOnLoad(gameObject);
         Gold = startingGold;
         _slots = new ItemData[slotCount];
         _stackCounts = new int[slotCount];

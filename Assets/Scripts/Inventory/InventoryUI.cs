@@ -22,11 +22,17 @@ public class InventoryUI : MonoBehaviour
     [SerializeField] private AbilitySlot spellSlot;
     [SerializeField] private AbilitySlot bulletBlockSlot;
 
-    [Header("Description")]
+    [Header("Item Description")]
     [SerializeField] private GameObject descriptionPanel;
     [SerializeField] private Image descriptionIcon;
     [SerializeField] private TMP_Text descriptionNameText;
     [SerializeField] private TMP_Text descriptionBodyText;
+
+    [Header("Ability Tooltip")]
+    [SerializeField] private RectTransform tooltipPanel;
+    [SerializeField] private TMP_Text tooltipNameText;
+    [SerializeField] private TMP_Text tooltipBodyText;
+    [SerializeField] private RectTransform canvasRect;
 
     private bool _isOpen;
     private InventorySlot[] _slots;
@@ -36,6 +42,14 @@ public class InventoryUI : MonoBehaviour
         BuildGrid();
         panel.SetActive(false);
         descriptionPanel.SetActive(false);
+        if (tooltipPanel != null)
+        {
+            tooltipPanel.gameObject.SetActive(false);
+            CanvasGroup cg = tooltipPanel.gameObject.GetComponent<CanvasGroup>();
+            if (cg == null) cg = tooltipPanel.gameObject.AddComponent<CanvasGroup>();
+            cg.blocksRaycasts = false;
+            cg.interactable = false;
+        }
     }
 
     private void Update()
@@ -91,7 +105,7 @@ public class InventoryUI : MonoBehaviour
     private void SetupAbilitySlot(AbilitySlot slot, bool unlocked)
     {
         if (slot == null) return;
-        slot.Setup(unlocked, ShowAbilityDescription, HideDescription);
+        slot.Setup(unlocked, ShowAbilityTooltip, HideTooltip);
     }
 
     private void ShowDescription(ItemData item)
@@ -104,17 +118,48 @@ public class InventoryUI : MonoBehaviour
         descriptionIcon.enabled = item.icon != null;
     }
 
-    private void ShowAbilityDescription(string abilityName, string description)
+    private void ShowAbilityTooltip(string abilityName, string description, RectTransform iconRect)
     {
-        descriptionPanel.SetActive(true);
-        descriptionNameText.text = abilityName;
-        descriptionBodyText.text = description;
-        descriptionIcon.enabled = false;
+        if (tooltipPanel == null) return;
+        tooltipNameText.text = abilityName;
+        tooltipBodyText.text = description;
+        tooltipPanel.gameObject.SetActive(true);
+
+        Canvas.ForceUpdateCanvases();
+
+        Canvas canvas = canvasRect != null ? canvasRect.GetComponent<Canvas>() : GetComponentInParent<Canvas>();
+        Camera cam = canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera;
+
+        // Get icon's screen position
+        Vector3[] corners = new Vector3[4];
+        iconRect.GetWorldCorners(corners);
+        Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(cam, corners[1]); // top-left corner
+
+        // Convert to canvas local position
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, screenPos, cam, out Vector2 localPos);
+
+        float tooltipW = tooltipPanel.rect.width;
+        float tooltipH = tooltipPanel.rect.height;
+        float canvasW = canvasRect.rect.width;
+        float canvasH = canvasRect.rect.height;
+
+        float x = localPos.x;
+        float y = localPos.y + 10f;
+
+        // Clamp accounting for pivot
+        float pivotX = tooltipPanel.pivot.x;
+        float pivotY = tooltipPanel.pivot.y;
+        x = Mathf.Clamp(x, -canvasW / 2f + tooltipW * pivotX, canvasW / 2f - tooltipW * (1f - pivotX));
+        if (y + tooltipH * (1f - pivotY) > canvasH / 2f)
+            y = localPos.y - tooltipH - iconRect.rect.height - 10f;
+        y = Mathf.Clamp(y, -canvasH / 2f + tooltipH * pivotY, canvasH / 2f - tooltipH * (1f - pivotY));
+
+        tooltipPanel.anchoredPosition = new Vector2(x, y);
     }
 
-    private void HideDescription()
+    private void HideTooltip()
     {
-        descriptionPanel.SetActive(false);
+        if (tooltipPanel != null) tooltipPanel.gameObject.SetActive(false);
     }
 
     public void CloseInventory() => Toggle();

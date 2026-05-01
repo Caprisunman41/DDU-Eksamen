@@ -15,9 +15,13 @@ public class PlayerHealth : MonoBehaviour
     private SpriteRenderer _sr;
     private Rigidbody2D _rb;
 
+    public static float SavedHealth = -1f;
+
     void Start()
     {
-        health = maxHealth;
+        health = SavedHealth > 0f ? SavedHealth : maxHealth;
+        SavedHealth = -1f;
+
         _controller = GetComponent<CharacterController>();
         _attack = GetComponent<PlayerAttack>();
         _sr = GetComponent<SpriteRenderer>();

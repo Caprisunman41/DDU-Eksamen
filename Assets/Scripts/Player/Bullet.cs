@@ -6,17 +6,23 @@ public class Bullet : MonoBehaviour
     public float damage = 2f;
     public float lifetime = 3f;
 
+    public float maxDistance = 15f;
+
     private Vector2 _direction;
+    private Vector2 _startPosition;
 
     public void Init(Vector2 direction)
     {
         _direction = direction.normalized;
+        _startPosition = transform.position;
         Destroy(gameObject, lifetime);
     }
 
     private void FixedUpdate()
     {
         transform.Translate(_direction * speed * Time.fixedDeltaTime, Space.World);
+        if (Vector2.Distance(_startPosition, transform.position) >= maxDistance)
+            Destroy(gameObject);
     }
 
     private void OnTriggerEnter2D(Collider2D other)

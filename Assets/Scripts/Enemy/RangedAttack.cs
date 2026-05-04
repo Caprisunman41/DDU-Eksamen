@@ -16,6 +16,10 @@ public class RangedAttack : MonoBehaviour
         _movement = GetComponent<EnemyMovement>();
         if (_movement != null) _movement.stopAtRange = attackRange;
 
+        // Ranged enemies don't deal contact damage
+        EnemyDamage dmg = GetComponent<EnemyDamage>();
+        if (dmg != null) dmg.enabled = false;
+
         GameObject player = GameObject.FindWithTag("Player");
         if (player != null) _playerTransform = player.transform;
     }
@@ -54,6 +58,6 @@ public class RangedAttack : MonoBehaviour
 
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         GameObject proj = Instantiate(projectilePrefab, spawnPos, Quaternion.Euler(0f, 0f, angle));
-        proj.GetComponent<EnemyProjectile>()?.Init(direction);
+        proj.GetComponent<EnemyProjectile>()?.Init(direction, GetComponent<Collider2D>());
     }
 }

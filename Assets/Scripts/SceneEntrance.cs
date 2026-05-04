@@ -9,6 +9,8 @@ public class SceneEntrance : MonoBehaviour, IInteractable
     [SerializeField] private ItemData requiredItem;
     [Tooltip("Slot index hvor nøglen skal sidde (-1 = tjek alle slots)")]
     [SerializeField] private int requiredSlotIndex = -1;
+    [Tooltip("NPC dialogue der vises når spilleren ikke har nøglen")]
+    [SerializeField] private NPC lockedDialogueNPC;
 
     public bool CanInteract() => true;
 
@@ -16,7 +18,7 @@ public class SceneEntrance : MonoBehaviour, IInteractable
     {
         if (requiredItem != null && !HasRequiredItem())
         {
-            Debug.Log("Du mangler " + requiredItem.itemName + " for at gå ind.");
+            lockedDialogueNPC?.Interact();
             return;
         }
 

@@ -27,7 +27,7 @@ public class PlayerHealth : MonoBehaviour
         _sr = GetComponent<SpriteRenderer>();
         _rb = GetComponent<Rigidbody2D>();
 
-        CheckpointManager.Instance.SetCheckpoint(transform.position);
+        CheckpointManager.Instance.SetCheckpoint(transform.position, null);
     }
 
     public void TakeDamage(float amount)

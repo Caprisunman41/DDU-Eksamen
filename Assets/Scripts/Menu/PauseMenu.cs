@@ -54,18 +54,23 @@ public class PauseMenu : MonoBehaviour
         Container.SetActive(false);
         Time.timeScale = 1f;
         isPaused = false;
+        InputManager.IsBlocked = false;
         playerHealth.Respawn();
     }
 
     public void RestartButton()
     {
         Time.timeScale = 1f;
+        isPaused = false;
+        InputManager.IsBlocked = false;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void QuitButton()
     {
         Time.timeScale = 1f;
+        isPaused = false;
+        InputManager.IsBlocked = false;
         SceneManager.LoadScene("Start");
     }
 }

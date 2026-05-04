@@ -3147,6 +3147,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SceneEntrance
   sceneName: Temple Map
   interactIndicator: {fileID: 46611709}
+  requiredItem: {fileID: 11400000, guid: 8cd2bc3d43f69432da3fedecab20e3cb, type: 2}
+  requiredSlotIndex: -1
 --- !u!1 &737970214
 GameObject:
   m_ObjectHideFlags: 0

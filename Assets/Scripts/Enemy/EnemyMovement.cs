@@ -25,6 +25,8 @@ public class EnemyMovement : MonoBehaviour
     public float stateUpdateInterval = 0.1f;
     [Tooltip("Skip all logic if player is further than this")]
     public float sleepDistance = 25f;
+    [Tooltip("Disable all contact effects (damage + knockback) — for ranged enemies")]
+    public bool disableContactEffects = false;
 
     [HideInInspector] public bool isChasing;
     [HideInInspector] public bool isKnockedBack = false;
@@ -201,6 +203,7 @@ public class EnemyMovement : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D col)
     {
+        if (disableContactEffects) return;
         CharacterController player = col.gameObject.GetComponent<CharacterController>();
         PlayerHealth ph = col.gameObject.GetComponent<PlayerHealth>();
         if (player == null || ph == null) return;

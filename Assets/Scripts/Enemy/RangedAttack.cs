@@ -14,7 +14,11 @@ public class RangedAttack : MonoBehaviour
     void Start()
     {
         _movement = GetComponent<EnemyMovement>();
-        if (_movement != null) _movement.stopAtRange = attackRange;
+        if (_movement != null)
+        {
+            _movement.stopAtRange = attackRange;
+            _movement.disableContactEffects = true;
+        }
 
         // Ranged enemies don't deal contact damage
         EnemyDamage dmg = GetComponent<EnemyDamage>();

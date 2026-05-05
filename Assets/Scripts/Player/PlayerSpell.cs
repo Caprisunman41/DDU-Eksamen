@@ -32,7 +32,7 @@ public class PlayerSpell : MonoBehaviour
         Vector2 direction = _controller.IsFacingRight ? Vector2.right : Vector2.left;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.Euler(0f, 0f, angle));
-        bullet.GetComponent<Bullet>().Init(direction);
+        bullet.GetComponent<Bullet>().Init(direction, GetComponent<Collider2D>());
         Debug.Log("Bullet spawnet i retning: " + direction);
     }
 }

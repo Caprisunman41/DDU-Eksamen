@@ -41,17 +41,19 @@ public class EnemyProjectile : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other == _ownerCollider) return;
-        if (other.CompareTag("Enemy") || other.transform.root.CompareTag("Enemy")) return;
+        if (other.GetComponentInParent<EnemyHealth>() != null) return;
 
-        if (other.transform.root.CompareTag("Player") && !other.isTrigger)
+        PlayerHealth ph = other.GetComponentInParent<PlayerHealth>();
+        CharacterController cc = other.GetComponentInParent<CharacterController>();
+        if (ph != null && !other.isTrigger)
         {
-            other.transform.root.GetComponent<PlayerHealth>()?.TakeDamage(damage);
-            other.transform.root.GetComponent<CharacterController>()?.TakeKnockback(_direction.x < 0);
+            ph.TakeDamage(damage);
+            if (cc != null) cc.TakeKnockback(_direction.x < 0);
             Destroy(gameObject);
+            return;
         }
-        else if (!other.isTrigger)
-        {
+
+        if (!other.isTrigger)
             Destroy(gameObject);
-        }
     }
 }

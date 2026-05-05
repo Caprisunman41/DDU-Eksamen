@@ -438,7 +438,7 @@ Transform:
   m_GameObject: {fileID: 46611709}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.003, y: 0.032, z: 0}
+  m_LocalPosition: {x: 0.003, y: 0.032, z: -1}
   m_LocalScale: {x: 0.26999995, y: 0.32399997, z: 0.40499997}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2433,7 +2433,7 @@ Transform:
   m_GameObject: {fileID: 484783142}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 166.25, y: 2.6200001, z: -10}
+  m_LocalPosition: {x: 0.5, y: -0.6499999, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4879,7 +4879,7 @@ Transform:
   m_GameObject: {fileID: 957968784}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 166.25, y: 2.6200001, z: -10}
+  m_LocalPosition: {x: 0.5, y: -0.6499999, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -22982,14 +22982,20 @@ MonoBehaviour:
   patrolPoints:
   - {fileID: 1305486518}
   - {fileID: 1827507223}
-  moveSpeed: 4
   patrolDestination: 0
+  moveSpeed: 4
+  acceleration: 8
+  spriteScale: 2.5
   playerTransform: {fileID: 91385627}
-  isChasing: 0
   chaseDistance: 16
   stopChaseDistance: 18
   stopAtRange: 0
-  spriteScale: 2.5
+  retreatRange: 0
+  reactionTime: 0.4
+  stateUpdateInterval: 0.1
+  sleepDistance: 25
+  disableContactEffects: 0
+  isChasing: 0
   isKnockedBack: 0
 --- !u!50 &1665480235
 Rigidbody2D:
@@ -23427,14 +23433,20 @@ MonoBehaviour:
   patrolPoints:
   - {fileID: 1013085376}
   - {fileID: 532670424}
-  moveSpeed: 3
   patrolDestination: 0
+  moveSpeed: 3
+  acceleration: 8
+  spriteScale: 2.5
   playerTransform: {fileID: 91385627}
-  isChasing: 0
   chaseDistance: 16
   stopChaseDistance: 18
   stopAtRange: 0
-  spriteScale: 2.5
+  retreatRange: 0
+  reactionTime: 0.4
+  stateUpdateInterval: 0.1
+  sleepDistance: 25
+  disableContactEffects: 0
+  isChasing: 0
   isKnockedBack: 0
 --- !u!50 &1733869349
 Rigidbody2D:
@@ -25220,11 +25232,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4344654207304336159, guid: c280ca2fb13cba545a1ae3222de46f9c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 166.25
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4344654207304336159, guid: c280ca2fb13cba545a1ae3222de46f9c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.52
+      value: -2.75
       objectReference: {fileID: 0}
     - target: {fileID: 4344654207304336159, guid: c280ca2fb13cba545a1ae3222de46f9c, type: 3}
       propertyPath: m_LocalPosition.z

@@ -21,8 +21,8 @@ public class RangedAttack : MonoBehaviour
         }
 
         // Ranged enemies don't deal contact damage
-        EnemyDamage dmg = GetComponent<EnemyDamage>();
-        if (dmg != null) dmg.enabled = false;
+        foreach (EnemyDamage dmg in GetComponentsInChildren<EnemyDamage>(true))
+            dmg.enabled = false;
 
         GameObject player = GameObject.FindWithTag("Player");
         if (player != null) _playerTransform = player.transform;

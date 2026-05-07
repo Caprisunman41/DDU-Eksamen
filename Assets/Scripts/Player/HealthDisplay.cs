@@ -24,14 +24,13 @@ public class HealthDisplay : MonoBehaviour
 
         for (int i = 0; i < hearts.Length; i++)
         {
-            if (i < Mathf.FloorToInt(health))
-                hearts[i].sprite = fullSprite;
-            else if (i < health)
-                hearts[i].sprite = halfSprite;
-            else
-                hearts[i].sprite = emptyHeart;
-
-            hearts[i].enabled = i < maxHealth;
+            Image h = hearts[i];
+            Sprite target = (i < Mathf.FloorToInt(health)) ? fullSprite
+                          : (i < health) ? halfSprite
+                          : emptyHeart;
+            if (h.sprite != target) h.sprite = target;
+            bool en = i < maxHealth;
+            if (h.enabled != en) h.enabled = en;
         }
     }
 

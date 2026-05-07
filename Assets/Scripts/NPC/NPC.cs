@@ -19,10 +19,12 @@ public class NPC : MonoBehaviour, IInteractable
     private CharacterController _playerController;
     private PlayerAttack _playerAttack;
     private Rigidbody2D _playerRb;
+    private PauseMenu _pauseMenu;
 
     private void Start()
     {
         dialogueUI = DialogueController.Instance;
+        _pauseMenu = Object.FindAnyObjectByType<PauseMenu>();
 
         GameObject player = GameObject.FindWithTag("Player");
         if (player != null)
@@ -47,8 +49,7 @@ public class NPC : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        PauseMenu pauseMenu = Object.FindAnyObjectByType<PauseMenu>();
-        if (dialogueData == null || (pauseMenu.isPaused && !isDialogueActive))
+        if (dialogueData == null || (_pauseMenu != null && _pauseMenu.isPaused && !isDialogueActive))
             return;
 
         if (!isDialogueActive)
@@ -91,8 +92,7 @@ public class NPC : MonoBehaviour, IInteractable
 
     public void AdvanceDialogue()
     {
-        PauseMenu pauseMenu = Object.FindAnyObjectByType<PauseMenu>();
-        if (dialogueData == null || pauseMenu.isPaused || !isDialogueActive || isChoosingOption || Time.time < advanceCooldown)
+        if (dialogueData == null || (_pauseMenu != null && _pauseMenu.isPaused) || !isDialogueActive || isChoosingOption || Time.time < advanceCooldown)
             return;
 
         NextLine();

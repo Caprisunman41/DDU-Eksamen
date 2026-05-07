@@ -34,9 +34,9 @@ public class RangedAttack : MonoBehaviour
 
         _fireTimer += Time.deltaTime;
 
-        float dist = Vector2.Distance(transform.position, _playerTransform.position);
         if (_movement != null && !_movement.isChasing) return;
-        if (dist > attackRange) return;
+        Vector2 toPlayer = (Vector2)_playerTransform.position - (Vector2)transform.position;
+        if (toPlayer.sqrMagnitude > attackRange * attackRange) return;
 
         if (_fireTimer >= fireInterval)
         {

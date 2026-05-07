@@ -13,7 +13,10 @@ public class DashCooldownUI : MonoBehaviour
     private void Update()
     {
         float progress = _player.DashCooldownProgress;
-        _fillImage.fillAmount = progress;
-        _iconImage.color = progress >= 1f ? _readyColor : _cooldownColor;
+        if (!Mathf.Approximately(_fillImage.fillAmount, progress))
+            _fillImage.fillAmount = progress;
+        Color target = progress >= 1f ? _readyColor : _cooldownColor;
+        if (_iconImage.color != target)
+            _iconImage.color = target;
     }
 }

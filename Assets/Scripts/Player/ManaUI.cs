@@ -23,29 +23,24 @@ public class ManaUI : MonoBehaviour
 
     private void Update()
     {
-        if (ManaManager.Instance == null) { Debug.LogError("ManaManager mangler"); return; }
-        if (_manaOrbs == null || _manaOrbs.Length == 0) { Debug.LogError("Mana Orbs ikke assigned i Inspector"); return; }
+        ManaManager mm = ManaManager.Instance;
+        if (mm == null || _manaOrbs == null || _manaOrbs.Length == 0) return;
 
-        int current = ManaManager.Instance.CurrentMana;
-        float killProgress = (float)ManaManager.Instance.KillsTowardNextMana / ManaManager.KillsPerMana;
+        int current = mm.CurrentMana;
+        int max = mm.MaxMana;
+        float killProgress = (float)mm.KillsTowardNextMana / ManaManager.KillsPerMana;
 
         for (int i = 0; i < _manaOrbs.Length; i++)
         {
-            if (i < current)
-            {
-                _manaOrbs[i].fillAmount = 1f;
-                _manaOrbs[i].color = _activeColor;
-            }
-            else if (i == current && current < ManaManager.Instance.MaxMana)
-            {
-                _manaOrbs[i].fillAmount = killProgress;
-                _manaOrbs[i].color = _activeColor;
-            }
-            else
-            {
-                _manaOrbs[i].fillAmount = 0f;
-                _manaOrbs[i].color = _emptyColor;
-            }
+            Image orb = _manaOrbs[i];
+            float targetFill;
+            Color targetColor;
+            if (i < current) { targetFill = 1f; targetColor = _activeColor; }
+            else if (i == current && current < max) { targetFill = killProgress; targetColor = _activeColor; }
+            else { targetFill = 0f; targetColor = _emptyColor; }
+
+            if (!Mathf.Approximately(orb.fillAmount, targetFill)) orb.fillAmount = targetFill;
+            if (orb.color != targetColor) orb.color = targetColor;
         }
     }
 }

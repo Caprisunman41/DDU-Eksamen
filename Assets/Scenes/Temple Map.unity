@@ -1952,7 +1952,7 @@ MonoBehaviour:
   - {fileID: 641873687}
   - {fileID: 1790162222}
   - {fileID: 1387431746}
-  playerHealth: {fileID: 0}
+  playerHealth: {fileID: 1765922031}
 --- !u!1 &309054157
 GameObject:
   m_ObjectHideFlags: 0
@@ -39392,7 +39392,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a3c575abc8354112846a09a6a0765aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DashCooldownUI
-  _player: {fileID: 0}
+  _player: {fileID: 1765922030}
   _fillImage: {fileID: 830998225}
   _iconImage: {fileID: 309054159}
 --- !u!114 &830998225
@@ -40226,7 +40226,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   Container: {fileID: 504396445}
   isPaused: 0
-  playerHealth: {fileID: 0}
+  playerHealth: {fileID: 1765922031}
 --- !u!1 &980796198
 GameObject:
   m_ObjectHideFlags: 0
@@ -45103,7 +45103,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d23e8970281749f2977c463449204dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameOver
-  playerHealth: {fileID: 0}
+  playerHealth: {fileID: 1765922031}
   Container1: {fileID: 576096241}
 --- !u!1 &2092478216
 GameObject:

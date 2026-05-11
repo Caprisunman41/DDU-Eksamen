@@ -12,12 +12,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e291936d1d7064d47a2e56f74db91986, type: 3}
   m_Name: VillagerDialogue
   m_EditorClassIdentifier: Assembly-CSharp::NPCDialogue
-  npcName: 
+  npcName: Village Leader
   npcPortrait: {fileID: 0}
-  dialogueLines: []
+  dialogueLines:
+  - Wait! Don't leave yet!...
+  - Please... Help us...
+  - A villager has been kidnapped... We're not fighters... Please rescue her!
+  - I'll give you anything i can if you help...
+  - Oh thank you!
   autoProgressLines: 
   endDialogueLines: 
   autoProgressDelay: 1.5
   typingSpeed: 0.05
-  dialogueChoices: []
+  dialogueChoices:
+  - dialogueIndex: 1
+    choices:
+    - What happened?
+    nextDialogueIndexes: 02000000
+    goldCosts: 
+    insufficientGoldIndexes: 
+  - dialogueIndex: 3
+    choices:
+    - Okay. I'll Help.
+    nextDialogueIndexes: 04000000
+    goldCosts: 
+    insufficientGoldIndexes: 
   paidDialogueStartIndex: -1

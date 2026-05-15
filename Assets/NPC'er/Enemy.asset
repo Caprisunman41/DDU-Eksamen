@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e291936d1d7064d47a2e56f74db91986, type: 3}
+  m_Name: Enemy
+  m_EditorClassIdentifier: Assembly-CSharp::NPCDialogue
+  npcName: Enemy
+  npcPortrait: {fileID: 0}
+  dialogueLines:
+  - Wait... Don't kill me...
+  - Please... I promise I'll change my ways...
+  - Why... You... Evil... Bastard...
+  - Thank you... I knew you had changed your ways...
+  - I remember when you were my boss. You were...
+  - Horrible... Yes. Horrible...
+  - 'Thank you for saving me... '
+  - I'll follow your path... And become good again...
+  autoProgressLines: 0100000101010100
+  endDialogueLines: 0000010000000001
+  autoProgressDelay: 1.5
+  typingSpeed: 0.05
+  dialogueChoices:
+  - dialogueIndex: 1
+    choices:
+    - Let him die
+    - Save him
+    nextDialogueIndexes: 0200000003000000
+    goldCosts: 
+    insufficientGoldIndexes: 
+  paidDialogueStartIndex: -1

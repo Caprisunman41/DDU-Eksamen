@@ -9,12 +9,33 @@ public class NPC : MonoBehaviour, IInteractable
 {
     public NPCDialogue dialogueData;
     [SerializeField] private GameObject interactIndicator;
+    [Tooltip("Unik ID for denne NPC — bruges til at huske dialog-state (betalt, talt med) på tværs af scener.")]
+    [SerializeField] private string npcId = "";
     private DialogueController dialogueUI;
 
     private int dialogueIndex;
     private bool isTyping, isDialogueActive;
     private bool isChoosingOption;
     private bool _hasPaid;
+
+    private bool HasPaidPersistent
+    {
+        get
+        {
+            if (!string.IsNullOrEmpty(npcId) && GameStateManager.Instance != null)
+                return GameStateManager.Instance.PaidNpcs.Contains(npcId);
+            return _hasPaid;
+        }
+        set
+        {
+            _hasPaid = value;
+            if (value && !string.IsNullOrEmpty(npcId) && GameStateManager.Instance != null)
+            {
+                GameStateManager.Instance.PaidNpcs.Add(npcId);
+                GameStateManager.Instance.Save();
+            }
+        }
+    }
 
     private CharacterController _playerController;
     private PlayerAttack _playerAttack;
@@ -80,7 +101,7 @@ public class NPC : MonoBehaviour, IInteractable
                         if (fallback >= 0) ChooseOption(fallback);
                         return;
                     }
-                    _hasPaid = true;
+                    HasPaidPersistent = true;
                 }
                 ChooseOption(choice.nextDialogueIndexes[index]);
                 return;
@@ -110,7 +131,7 @@ public class NPC : MonoBehaviour, IInteractable
     void StartDialogue()
     {
         isDialogueActive = true;
-        dialogueIndex = (_hasPaid && dialogueData.paidDialogueStartIndex >= 0)
+        dialogueIndex = (HasPaidPersistent && dialogueData.paidDialogueStartIndex >= 0)
             ? dialogueData.paidDialogueStartIndex
             : 0;
 
@@ -204,7 +225,7 @@ public class NPC : MonoBehaviour, IInteractable
                         if (fallback >= 0) ChooseOption(fallback);
                         return;
                     }
-                    _hasPaid = true;
+                    HasPaidPersistent = true;
                 }
                 ChooseOption(nextIndex);
             });
@@ -225,10 +246,22 @@ public class NPC : MonoBehaviour, IInteractable
         StopAllCoroutines();
         isDialogueActive = false;
 
+        if (!string.IsNullOrEmpty(npcId) && GameStateManager.Instance != null)
+        {
+            GameStateManager.Instance.TalkedNpcs.Add(npcId);
+            GameStateManager.Instance.Save();
+        }
+
         if (_playerController != null) _playerController.enabled = true;
         if (_playerAttack != null) _playerAttack.enabled = true;
 
         dialogueUI.SetDialogueText("");
         dialogueUI.showDialogueUI(false);
+    }
+
+    public bool HasTalkedTo()
+    {
+        if (string.IsNullOrEmpty(npcId) || GameStateManager.Instance == null) return false;
+        return GameStateManager.Instance.TalkedNpcs.Contains(npcId);
     }
 }

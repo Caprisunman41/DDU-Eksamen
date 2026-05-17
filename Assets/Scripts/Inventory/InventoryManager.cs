@@ -55,6 +55,28 @@ public class InventoryManager : MonoBehaviour
         return false;
     }
 
+    public bool RemoveItem(ItemData item, int count = 1)
+    {
+        if (item == null || count <= 0) return false;
+
+        for (int i = 0; i < slotCount && count > 0; i++)
+        {
+            if (_slots[i] != item) continue;
+
+            int take = Mathf.Min(_stackCounts[i], count);
+            _stackCounts[i] -= take;
+            count -= take;
+
+            if (_stackCounts[i] <= 0)
+            {
+                _slots[i] = null;
+                _stackCounts[i] = 0;
+            }
+        }
+
+        return count == 0;
+    }
+
     public bool TrySpendGold(int amount)
     {
         if (Gold < amount) return false;
@@ -72,6 +94,36 @@ public class InventoryManager : MonoBehaviour
             case "WallJump":    HasWallJump = true;    break;
             case "Spell":       HasSpell = true;       break;
             case "BulletBlock": HasBulletBlock = true; break;
+        }
+    }
+
+    public void RestoreFromSave(GameStateData data)
+    {
+        if (data == null) return;
+
+        Gold = data.gold;
+        HasDash = data.hasDash;
+        HasWallJump = data.hasWallJump;
+        HasSpell = data.hasSpell;
+        HasBulletBlock = data.hasBulletBlock;
+
+        for (int i = 0; i < slotCount; i++)
+        {
+            _slots[i] = null;
+            _stackCounts[i] = 0;
+        }
+
+        int max = Mathf.Min(slotCount, data.slotItemNames.Count);
+        for (int i = 0; i < max; i++)
+        {
+            string name = data.slotItemNames[i];
+            if (string.IsNullOrEmpty(name)) continue;
+            ItemData item = GameStateManager.Instance != null
+                ? GameStateManager.Instance.LookupItem(name)
+                : null;
+            if (item == null) continue;
+            _slots[i] = item;
+            _stackCounts[i] = data.slotStackCounts[i];
         }
     }
 }

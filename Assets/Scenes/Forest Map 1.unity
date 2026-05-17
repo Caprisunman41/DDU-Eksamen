@@ -1680,6 +1680,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NPC
   dialogueData: {fileID: 11400000, guid: facc3a7ded984b94b9970f67b63d082c, type: 2}
   interactIndicator: {fileID: 1363390753}
+  npcId: 
 --- !u!70 &306085361
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -1779,6 +1780,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NPC
   dialogueData: {fileID: 11400000, guid: 1f1b3639c2b595a48b18402a31d2920d, type: 2}
   interactIndicator: {fileID: 1324792779}
+  npcId: 
 --- !u!70 &336413105
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -2306,6 +2308,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemPickup
   item: {fileID: 11400000, guid: 8cd2bc3d43f69432da3fedecab20e3cb, type: 2}
   slotIndex: 0
+  pickupId: 
 --- !u!4 &383723654
 Transform:
   m_ObjectHideFlags: 0
@@ -4156,6 +4159,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 46611711}
+  - {fileID: 1336504310}
   m_Father: {fileID: 1570571303}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &720627384
@@ -4217,10 +4221,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneEntrance
   sceneName: Temple Map
-  interactIndicator: {fileID: 46611709}
+  entranceId: Forest0
+  targetEntranceId: Temple0
+  spawnPoint: {fileID: 1336504310}
+  doorId: 0
   requiredItem: {fileID: 11400000, guid: 8cd2bc3d43f69432da3fedecab20e3cb, type: 2}
   requiredSlotIndex: -1
+  consumeKey: 1
   lockedDialogueNPC: {fileID: 720627386}
+  interactIndicator: {fileID: 46611709}
 --- !u!114 &720627386
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4235,6 +4244,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NPC
   dialogueData: {fileID: 11400000, guid: 10c91b457c7ab4c36a64085039431b1a, type: 2}
   interactIndicator: {fileID: 46611709}
+  npcId: 
 --- !u!1 &737970214
 GameObject:
   m_ObjectHideFlags: 0
@@ -8636,6 +8646,37 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!1 &1336504309
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1336504310}
+  m_Layer: 0
+  m_Name: SpawnPDoor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1336504310
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1336504309}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.248, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 720627383}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1344064530
 GameObject:
   m_ObjectHideFlags: 0

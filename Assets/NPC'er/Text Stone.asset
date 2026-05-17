@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e291936d1d7064d47a2e56f74db91986, type: 3}
+  m_Name: Text Stone
+  m_EditorClassIdentifier: Assembly-CSharp::NPCDialogue
+  npcName: Stone
+  npcPortrait: {fileID: 0}
+  dialogueLines:
+  - '*Long ago, when evil ruled the world)'
+  - There was the most brutal and horrible of all...
+  - Scathon.
+  - After decades of brutal slaughter and terror, he suddenly started feeling guilt
+  - And on one faithful day, he redeemed himself.
+  - Instead, he became Aethon. Blowing orb, but he never fully recovered
+  - 'He still can turn back... '
+  autoProgressLines: 01010101010100
+  endDialogueLines: 00000000000001
+  autoProgressDelay: 1.5
+  typingSpeed: 0.05
+  dialogueChoices: []
+  paidDialogueStartIndex: -1
+  sceneRoutes: []

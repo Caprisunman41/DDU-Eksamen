@@ -4,22 +4,21 @@ using UnityEngine.UI;
 
 public class DialogueController : MonoBehaviour
 {
-    public static DialogueController Instance { get; private set; } // Singleton Instance
-
+    public static DialogueController Instance { get; private set; }
     public GameObject dialoguePanel;
     public TMP_Text dialogueText, nameText;
     public Transform choiceContainer;
-    public GameObject choiceButtonPrefab; 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public GameObject choiceButtonPrefab;
+
     void Awake()
     {
-        if (Instance == null) Instance = this; 
-        else Destroy(gameObject); //make sure only one instance
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
     }
 
-   public void showDialogueUI(bool show)
+    public void showDialogueUI(bool show)
     {
-        dialoguePanel.SetActive(show); // Toggle UI visibility.
+        dialoguePanel.SetActive(show);
     }
 
     public void SetNPCInfo(string npcName)
@@ -29,7 +28,7 @@ public class DialogueController : MonoBehaviour
 
     public void SetDialogueText(string text)
     {
-        dialogueText.text = text; 
+        dialogueText.text = text;
     }
 
     public void ClearChoices()

@@ -20,6 +20,18 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Cave Map 1.unity
     guid: 6af3864e486526a419f41b9dbd339e66
+  - enabled: 1
+    path: Assets/Scenes/Temple Map 1.unity
+    guid: 9d230ac6fa50dc14a8bfda0b196b9d65
+  - enabled: 1
+    path: Assets/Scenes/Forest 2.2.unity
+    guid: 564a51befa1dc9546beeebfe47d62e7e
+  - enabled: 1
+    path: Assets/Scenes/Forest 2.1.unity
+    guid: 6aa917404ede0a440ba287117d47e76f
+  - enabled: 1
+    path: Assets/Scenes/Cave Map 2.unity
+    guid: b41911acc827cae448cb7af4cc7e9dc7
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

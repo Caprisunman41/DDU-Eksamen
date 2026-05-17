@@ -10,6 +10,8 @@ public class GameStateData
     public List<string> collectedPickups = new List<string>();
     public List<string> paidNpcs = new List<string>();
     public List<string> talkedNpcs = new List<string>();
+    public List<string> npcDialogueChoiceKeys = new List<string>();
+    public List<int> npcDialogueChoiceValues = new List<int>();
 
     public string lastCheckpointScene;
     public Vector3 lastCheckpointPos;
@@ -33,12 +35,14 @@ public class GameStateManager : MonoBehaviour
     public HashSet<string> CollectedPickups = new HashSet<string>();
     public HashSet<string> PaidNpcs = new HashSet<string>();
     public HashSet<string> TalkedNpcs = new HashSet<string>();
+    public Dictionary<string, int> NpcDialogueChoices = new Dictionary<string, int>();
 
     public string LastCheckpointScene;
     public Vector3 LastCheckpointPos;
     public bool HasCheckpoint;
 
     public string PendingEntranceId;
+    public string PendingNextScene;
     public bool PendingCheckpointRespawn;
 
     private GameStateData _pendingInventoryData;
@@ -123,6 +127,12 @@ public class GameStateManager : MonoBehaviour
             hasCheckpoint = HasCheckpoint
         };
 
+        foreach (var kvp in NpcDialogueChoices)
+        {
+            data.npcDialogueChoiceKeys.Add(kvp.Key);
+            data.npcDialogueChoiceValues.Add(kvp.Value);
+        }
+
         InventoryManager inv = InventoryManager.Instance;
         if (inv != null)
         {
@@ -151,6 +161,8 @@ public class GameStateManager : MonoBehaviour
         CollectedPickups.Clear();
         PaidNpcs.Clear();
         TalkedNpcs.Clear();
+        NpcDialogueChoices.Clear();
+        PendingNextScene = "";
         LastCheckpointScene = null;
         HasCheckpoint = false;
     }
@@ -168,6 +180,10 @@ public class GameStateManager : MonoBehaviour
         LastCheckpointScene = data.lastCheckpointScene;
         LastCheckpointPos = data.lastCheckpointPos;
         HasCheckpoint = data.hasCheckpoint;
+
+        NpcDialogueChoices.Clear();
+        for (int i = 0; i < data.npcDialogueChoiceKeys.Count; i++)
+            NpcDialogueChoices[data.npcDialogueChoiceKeys[i]] = data.npcDialogueChoiceValues[i];
 
         _pendingInventoryData = data;
         PendingCheckpointRespawn = HasCheckpoint;

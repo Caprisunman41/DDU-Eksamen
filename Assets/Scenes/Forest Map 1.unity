@@ -1780,7 +1780,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NPC
   dialogueData: {fileID: 11400000, guid: 1f1b3639c2b595a48b18402a31d2920d, type: 2}
   interactIndicator: {fileID: 1324792779}
-  npcId: 
+  npcId: Hermit
 --- !u!70 &336413105
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

@@ -4,12 +4,10 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-
 public class NPC : MonoBehaviour, IInteractable
 {
     public NPCDialogue dialogueData;
     [SerializeField] private GameObject interactIndicator;
-    [Tooltip("Unik ID for denne NPC — bruges til at huske dialog-state (betalt, talt med) på tværs af scener.")]
     [SerializeField] private string npcId = "";
     private DialogueController dialogueUI;
 
@@ -123,17 +121,29 @@ public class NPC : MonoBehaviour, IInteractable
     {
         advanceCooldown = Time.time + 0.5f;
         dialogueIndex = nextIndex;
+
+        if (!string.IsNullOrEmpty(npcId) && GameStateManager.Instance != null)
+        {
+            GameStateManager.Instance.NpcDialogueChoices[npcId] = nextIndex;
+            GameStateManager.Instance.Save();
+        }
+
         dialogueUI.ClearChoices();
         DisplayCurrentLine();
     }
 
-  
     void StartDialogue()
     {
         isDialogueActive = true;
-        dialogueIndex = (HasPaidPersistent && dialogueData.paidDialogueStartIndex >= 0)
-            ? dialogueData.paidDialogueStartIndex
-            : 0;
+
+        if (HasPaidPersistent && dialogueData.paidDialogueStartIndex >= 0)
+            dialogueIndex = dialogueData.paidDialogueStartIndex;
+        else if (!string.IsNullOrEmpty(npcId)
+                 && GameStateManager.Instance != null
+                 && GameStateManager.Instance.NpcDialogueChoices.TryGetValue(npcId, out int savedIndex))
+            dialogueIndex = savedIndex;
+        else
+            dialogueIndex = 0;
 
         if (_playerController != null) _playerController.enabled = false;
         if (_playerAttack != null) _playerAttack.enabled = false;
@@ -155,38 +165,29 @@ public class NPC : MonoBehaviour, IInteractable
             return;
         }
 
-        //clear choices
         dialogueUI.ClearChoices();
-        //check end dialogue lines
-        if(dialogueData.endDialogueLines.Length > dialogueIndex && dialogueData.endDialogueLines[dialogueIndex])
+
+        if (dialogueData.endDialogueLines.Length > dialogueIndex && dialogueData.endDialogueLines[dialogueIndex])
         {
             EndDialogue();
             return;
         }
 
-        // check if choices, and display
-        foreach(DialogueChoice dialogueChoice in dialogueData.dialogueChoices)
+        foreach (DialogueChoice dialogueChoice in dialogueData.dialogueChoices)
         {
-            if(dialogueChoice.dialogueIndex == dialogueIndex)
+            if (dialogueChoice.dialogueIndex == dialogueIndex)
             {
-                //display choices
                 DisplayChoices(dialogueChoice);
                 return;
             }
         }
 
-
-        if(++dialogueIndex < dialogueData.dialogueLines.Length)
-        {
-            // if another line, type next line
+        if (++dialogueIndex < dialogueData.dialogueLines.Length)
             DisplayCurrentLine();
-        }
-
         else
-        {
             EndDialogue();
-        }
     }
+
     IEnumerator TypeLine()
     {
         isTyping = true;
@@ -195,12 +196,12 @@ public class NPC : MonoBehaviour, IInteractable
         foreach (char letter in dialogueData.dialogueLines[dialogueIndex])
         {
             dialogueUI.SetDialogueText(dialogueUI.dialogueText.text += letter);
-           yield return new WaitForSeconds(dialogueData.typingSpeed);  
+            yield return new WaitForSeconds(dialogueData.typingSpeed);
         }
 
         isTyping = false;
 
-        if(dialogueData.autoProgressLines.Length > dialogueIndex && dialogueData.autoProgressLines[dialogueIndex])
+        if (dialogueData.autoProgressLines.Length > dialogueIndex && dialogueData.autoProgressLines[dialogueIndex])
         {
             yield return new WaitForSeconds(dialogueData.autoProgressDelay);
             NextLine();
@@ -232,8 +233,6 @@ public class NPC : MonoBehaviour, IInteractable
         }
     }
 
-    
-
     void DisplayCurrentLine()
     {
         isChoosingOption = false;
@@ -251,6 +250,22 @@ public class NPC : MonoBehaviour, IInteractable
             GameStateManager.Instance.TalkedNpcs.Add(npcId);
             GameStateManager.Instance.Save();
         }
+
+        if (dialogueData.sceneRoutes != null && GameStateManager.Instance != null)
+        {
+            foreach (var route in dialogueData.sceneRoutes)
+            {
+                if (route.dialogueIndex == dialogueIndex)
+                {
+                    GameStateManager.Instance.PendingNextScene = route.sceneName;
+                    GameStateManager.Instance.Save();
+                    break;
+                }
+            }
+        }
+
+        Debug.Log("dialogueIndex ved slutning: " + dialogueIndex);
+        Debug.Log("PendingNextScene sat til: " + (GameStateManager.Instance?.PendingNextScene ?? "INGEN"));
 
         if (_playerController != null) _playerController.enabled = true;
         if (_playerAttack != null) _playerAttack.enabled = true;

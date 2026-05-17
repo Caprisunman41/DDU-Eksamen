@@ -38531,9 +38531,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1baca1322d43c4ea89920aa1b8416daf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneEntrance
-  sceneName: Cave Map 1
-  entranceId: Temple11
-  targetEntranceId: Cave0
+  sceneName: Cave Map 2
+  entranceId: Temple2
+  targetEntranceId: Cave2
   spawnPoint: {fileID: 635574639}
   doorId: 2
   requiredItem: {fileID: 0}
@@ -41078,7 +41078,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneEntrance
   sceneName: Forest Map 1
-  entranceId: Temple1
+  entranceId: Temple2
   targetEntranceId: Forest0
   spawnPoint: {fileID: 649419897}
   doorId: 1

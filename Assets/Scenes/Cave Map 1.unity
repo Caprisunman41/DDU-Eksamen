@@ -4289,9 +4289,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1baca1322d43c4ea89920aa1b8416daf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneEntrance
-  sceneName: Forest Map 1
+  sceneName: Temple Map
   entranceId: Cave0
-  targetEntranceId: Temple Map
+  targetEntranceId: Temple1
   spawnPoint: {fileID: 166891629}
   doorId: 3
   requiredItem: {fileID: 0}
@@ -8613,7 +8613,7 @@ Transform:
   m_GameObject: {fileID: 1006828125}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -9.215073, y: 6.619999, z: -9}
+  m_LocalPosition: {x: 1.8199997, y: 6.619999, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -134969,7 +134969,7 @@ Transform:
   m_GameObject: {fileID: 1561843599}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -9.215073, y: 6.619999, z: -9}
+  m_LocalPosition: {x: 1.8199997, y: 6.619999, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -135957,7 +135957,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4344654207304336159, guid: c280ca2fb13cba545a1ae3222de46f9c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -9.215073
+      value: 1.82
       objectReference: {fileID: 0}
     - target: {fileID: 4344654207304336159, guid: c280ca2fb13cba545a1ae3222de46f9c, type: 3}
       propertyPath: m_LocalPosition.y

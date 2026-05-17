@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class PlayerHealth : MonoBehaviour
@@ -27,7 +28,8 @@ public class PlayerHealth : MonoBehaviour
         _sr = GetComponent<SpriteRenderer>();
         _rb = GetComponent<Rigidbody2D>();
 
-        CheckpointManager.Instance.SetCheckpoint(transform.position, null);
+        if (CheckpointManager.Instance != null)
+            CheckpointManager.Instance.SetFallback(transform.position);
     }
 
     public void TakeDamage(float amount)
@@ -52,6 +54,18 @@ public class PlayerHealth : MonoBehaviour
 
     public void Respawn()
     {
+        GameStateManager gs = GameStateManager.Instance;
+        string currentScene = SceneManager.GetActiveScene().name;
+
+        if (gs != null && gs.HasCheckpoint && gs.LastCheckpointScene != currentScene)
+        {
+            SavedHealth = -1f;
+            gs.PendingCheckpointRespawn = true;
+            Time.timeScale = 1f;
+            SceneManager.LoadScene(gs.LastCheckpointScene);
+            return;
+        }
+
         isDead = false;
         health = maxHealth;
         transform.position = CheckpointManager.Instance.RespawnPosition;

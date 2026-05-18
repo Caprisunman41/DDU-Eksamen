@@ -5243,7 +5243,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SceneEntrance
   sceneName: Forest 2.1
   entranceId: Cave11
-  targetEntranceId: Forest 211
+  targetEntranceId: main
   spawnPoint: {fileID: 1547604781}
   doorId: 3
   requiredItem: {fileID: 0}
@@ -10865,7 +10865,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SceneEntrance
   sceneName: Forest 2.1
   entranceId: Cave12
-  targetEntranceId: Forest 211
+  targetEntranceId: main
   spawnPoint: {fileID: 811585052}
   doorId: 3
   requiredItem: {fileID: 0}

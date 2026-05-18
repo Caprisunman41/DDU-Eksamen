@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e291936d1d7064d47a2e56f74db91986, type: 3}
   m_Name: AliveHermit
   m_EditorClassIdentifier: Assembly-CSharp::NPCDialogue
-  npcName: 
+  npcName: Hermit
   npcPortrait: {fileID: 0}
   dialogueLines:
   - Thank you for helping me
